@@ -17,11 +17,17 @@ import 'package:local_auth/local_auth.dart';
 
 /// Dependency container with explicit register/resolve APIs.
 class CPDI {
-  static final Map<Type, Object> _dependencies = <Type, Object>{};
-  static bool _initialized = false;
+  CPDI._internal();
+  static final CPDI _instance = CPDI._internal();
+
+  /// Shared singleton DI instance.
+  factory CPDI() => _instance;
+
+  final Map<Type, Object> _dependencies = <Type, Object>{};
+  bool _initialized = false;
 
   /// Initializes all runtime dependencies.
-  static Future<void> init() async {
+  Future<void> init() async {
     if (_initialized) {
       return;
     }
@@ -82,12 +88,12 @@ class CPDI {
   }
 
   /// Registers singleton dependency instance.
-  static void registerDependency<T extends Object>(T dependency) {
+  void registerDependency<T extends Object>(T dependency) {
     _dependencies[T] = dependency;
   }
 
   /// Resolves dependency by type.
-  static T resolveDependency<T extends Object>() {
+  T resolveDependency<T extends Object>() {
     final Object? dependency = _dependencies[T];
     if (dependency == null) {
       throw StateError('Dependency $T is not registered in CPDI.');
@@ -96,10 +102,7 @@ class CPDI {
   }
 
   /// Resolves async dependency by type.
-  static Future<T> resolveAsyncDependency<T extends Object>() async {
+  Future<T> resolveAsyncDependency<T extends Object>() async {
     return resolveDependency<T>();
   }
-
-  /// Instance-based resolver for convenience in widgets.
-  T resolve<T extends Object>() => resolveDependency<T>();
 }

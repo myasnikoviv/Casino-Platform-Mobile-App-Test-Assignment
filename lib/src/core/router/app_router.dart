@@ -17,9 +17,10 @@ import 'package:go_router/go_router.dart';
 
 /// Application router configuration with auth-aware redirection policy.
 abstract final class CPRouter {
+  static final CPDI _di = CPDI();
   static final CPAuthGuard _authGuard = CPAuthGuard();
   static final _CPAuthRefreshListenable _refreshListenable =
-      _CPAuthRefreshListenable(CPDI.resolveDependency<CPAuthCubit>());
+      _CPAuthRefreshListenable(_di.resolveDependency<CPAuthCubit>());
 
   /// GoRouter instance used by [MaterialApp.router].
   static final GoRouter router = GoRouter(
@@ -86,7 +87,7 @@ abstract final class CPRouter {
   );
 
   static String? _redirect(BuildContext _, GoRouterState state) {
-    final CPAuthState authState = CPDI.resolveDependency<CPAuthCubit>().state;
+    final CPAuthState authState = _di.resolveDependency<CPAuthCubit>().state;
     if (authState is CPAuthUnknownState) {
       return null;
     }

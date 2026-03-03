@@ -7,6 +7,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await CPDI.init();
+  await CPDI().init();
   runApp(const CPCasinoApp());
 }

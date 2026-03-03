@@ -12,12 +12,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CPCasinoApp extends StatelessWidget {
   /// Creates [CPCasinoApp].
   const CPCasinoApp({super.key});
+  static final CPDI _di = CPDI();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CPAuthCubit>(
       lazy: false,
-      create: (_) => CPDI.resolveDependency<CPAuthCubit>()..initialize(),
+      create: (_) => _di.resolveDependency<CPAuthCubit>()..initialize(),
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
         minTextAdapt: true,

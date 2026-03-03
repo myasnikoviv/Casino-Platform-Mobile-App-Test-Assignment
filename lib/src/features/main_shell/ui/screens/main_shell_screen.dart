@@ -26,8 +26,9 @@ class CPMainShellScreen extends StatefulWidget {
 }
 
 class _CPMainShellScreenState extends State<CPMainShellScreen> {
+  static final CPDI _di = CPDI();
   final CPGamesCubit _gamesCubit =
-      CPGamesCubit(CPDI.resolveDependency<CPGamesService>());
+      CPGamesCubit(_di.resolveDependency<CPGamesService>());
   int _index = 0;
   bool _loaded = false;
 
