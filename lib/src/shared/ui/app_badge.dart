@@ -14,6 +14,7 @@ class CPAppBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(minHeight: 28.h),
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: CPAppColors.primary.withValues(alpha: 0.12),
@@ -21,6 +22,9 @@ class CPAppBadge extends StatelessWidget {
       ),
       child: Text(
         label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
         style: CPAppTextStyles.label.copyWith(color: CPAppColors.primary),
       ),
     );

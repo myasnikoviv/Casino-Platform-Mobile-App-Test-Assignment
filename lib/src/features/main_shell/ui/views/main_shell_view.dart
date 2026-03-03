@@ -20,7 +20,11 @@ class CPMainShellView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: index, children: tabs),
+      body: SafeArea(
+        top: true,
+        bottom: false,
+        child: IndexedStack(index: index, children: tabs),
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: index,
         onDestinationSelected: onIndexChanged,

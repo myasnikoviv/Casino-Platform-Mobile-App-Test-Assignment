@@ -72,6 +72,10 @@ class _CPGameCardState extends State<CPGameCard>
         },
         child: Card(
           clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.r),
+          ),
+          elevation: 1.5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -87,18 +91,21 @@ class _CPGameCardState extends State<CPGameCard>
               ),
               Padding(
                 padding: EdgeInsets.all(6.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      widget.game.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: CPAppTextStyles.label,
-                    ),
-                    SizedBox(height: 3.h),
-                    CPAppBadge(label: widget.game.categoryLabel),
-                  ],
+                child: SizedBox(
+                  height: 56.h,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        widget.game.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: CPAppTextStyles.label,
+                      ),
+                      CPAppBadge(label: widget.game.categoryLabel),
+                    ],
+                  ),
                 ),
               ),
             ],
