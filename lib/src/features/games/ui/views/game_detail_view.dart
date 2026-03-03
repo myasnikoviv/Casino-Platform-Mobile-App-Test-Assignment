@@ -5,6 +5,7 @@ import 'package:casino_platform_test/src/features/games/ui/view_models/game_view
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
 import 'package:casino_platform_test/src/shared/ui/app_badge.dart';
 import 'package:casino_platform_test/src/shared/ui/app_button.dart';
+import 'package:casino_platform_test/src/shared/ui/app_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -29,7 +30,10 @@ class CPGameDetailView extends StatelessWidget {
             height: 250.h,
             child: CPGameImageHero(
               gameId: game.id,
-              child: Image.network(game.headerUrl, fit: BoxFit.cover),
+              child: CPAppCachedNetworkImage(
+                imageUrl: game.headerUrl,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Padding(

@@ -1,6 +1,7 @@
 import 'package:casino_platform_test/src/core/theme/app_text_styles.dart';
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
 import 'package:casino_platform_test/src/shared/ui/app_button.dart';
+import 'package:casino_platform_test/src/shared/ui/app_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -56,10 +57,10 @@ class CPPromoBanner extends StatelessWidget {
       padding: EdgeInsets.only(right: 8.w),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18.r),
-        child: Stack(
+          child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            Image.network(imageUrl, fit: BoxFit.cover),
+            CPAppCachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
             const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
