@@ -4,12 +4,17 @@ import 'package:casino_platform_test/src/core/storage/hive_secure_box_factory.da
 import 'package:casino_platform_test/src/core/storage/secure_storage_service.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway.dart';
+import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway_impl.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service_impl.dart';
 import 'package:casino_platform_test/src/core/constants/app_constants.dart';
+import 'package:casino_platform_test/src/features/games/adapters/game_view_model_adapter.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway_impl.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
-import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway_impl.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service_impl.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -59,28 +64,36 @@ class CPDI {
 
     final Box<dynamic> cacheBox =
         await Hive.openBox<dynamic>(CPAppConstants.cacheBoxName);
+    registerDependency<CPGamesLocalGateway>(const CPGamesLocalGatewayImpl());
+    registerDependency<CPGamesApiGateway>(const CPGamesApiGatewayImpl());
     registerDependency<CPGamesGateway>(
       CPGamesGatewayImpl(
-        const CPGamesJsonDataSource(),
-        CPHiveTtlCache<List<CPGameDto>>(
-          box: cacheBox,
-          cacheKey: CPAppConstants.gamesCacheKey,
-          encode: (List<CPGameDto> value) {
-            return value.map((CPGameDto dto) => dto.toJson()).toList();
-          },
-          decode: (Object? raw) {
-            final List<dynamic> data = raw as List<dynamic>;
-            return data
-                .map((dynamic item) =>
-                    CPGameDto.fromJson(item as Map<String, dynamic>))
-                .toList();
-          },
-        ),
+        resolveDependency<CPGamesLocalGateway>(),
+        resolveDependency<CPGamesApiGateway>(),
       ),
     );
+    registerDependency<CPTtlCache<List<CPGameDto>>>(
+      CPHiveTtlCache<List<CPGameDto>>(
+        box: cacheBox,
+        cacheKey: CPAppConstants.gamesCacheKey,
+        encode: (List<CPGameDto> value) {
+          return value.map((CPGameDto dto) => dto.toJson()).toList();
+        },
+        decode: (Object? raw) {
+          final List<dynamic> data = raw as List<dynamic>;
+          return data
+              .map((dynamic item) =>
+                  CPGameDto.fromJson(item as Map<String, dynamic>))
+              .toList();
+        },
+      ),
+    );
+    registerDependency<CPGameViewModelAdapter>(const CPGameViewModelAdapter());
     registerDependency<CPGamesService>(
       CPGamesServiceImpl(
         resolveDependency<CPGamesGateway>(),
+        resolveDependency<CPTtlCache<List<CPGameDto>>>(),
+        resolveDependency<CPGameViewModelAdapter>(),
         resolveDependency<CPGuardedExecutor>(),
       ),
     );

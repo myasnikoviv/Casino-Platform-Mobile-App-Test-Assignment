@@ -1,9 +1,11 @@
 import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
 import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
+import 'package:casino_platform_test/src/features/games/adapters/game_view_model_adapter.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service_impl.dart';
 import 'package:casino_platform_test/src/shared/enums/game_category.dart';
@@ -37,8 +39,10 @@ void main() {
               ),
             ],
           ),
-          CPMemoryTtlCache<List<CPGameDto>>(),
+          const _NoopApiGateway(),
         ),
+        CPMemoryTtlCache<List<CPGameDto>>(),
+        const CPGameViewModelAdapter(),
         CPGuardedExecutor(),
       );
 
@@ -54,8 +58,10 @@ void main() {
       final CPGamesService service = CPGamesServiceImpl(
         CPGamesGatewayImpl(
           _StaticGamesSource(const <CPGameDto>[]),
-          CPMemoryTtlCache<List<CPGameDto>>(),
+          const _NoopApiGateway(),
         ),
+        CPMemoryTtlCache<List<CPGameDto>>(),
+        const CPGameViewModelAdapter(),
         CPGuardedExecutor(),
       );
 
@@ -66,11 +72,18 @@ void main() {
   });
 }
 
-class _StaticGamesSource extends CPGamesJsonDataSource {
+class _StaticGamesSource implements CPGamesLocalGateway {
   _StaticGamesSource(this._games);
 
   final List<CPGameDto> _games;
 
   @override
   Future<List<CPGameDto>> loadGames() async => _games;
+}
+
+class _NoopApiGateway implements CPGamesApiGateway {
+  const _NoopApiGateway();
+
+  @override
+  Future<List<CPGameDto>> fetchGames() async => const <CPGameDto>[];
 }

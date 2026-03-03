@@ -1,41 +1,27 @@
-import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
-import 'package:casino_platform_test/src/core/constants/app_constants.dart';
-import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway.dart';
 
 /// Contract for games data retrieval.
 abstract interface class CPGamesGateway {
   /// Returns game catalog.
   Future<List<CPGameDto>> getGames();
-
-  /// Clears cached catalog.
-  void clearCache();
 }
 
-/// Gateway that serves games from data source with TTL caching policy.
+/// Gateway that orchestrates local and remote game gateways.
 class CPGamesGatewayImpl implements CPGamesGateway {
   /// Creates [CPGamesGatewayImpl].
-  const CPGamesGatewayImpl(this._dataSource, this._cache);
+  const CPGamesGatewayImpl(this._localGateway, this._apiGateway);
 
-  final CPGamesJsonDataSource _dataSource;
-  final CPTtlCache<List<CPGameDto>> _cache;
+  final CPGamesLocalGateway _localGateway;
+  final CPGamesApiGateway _apiGateway;
 
-  /// Returns game catalog from cache or source when cache expired.
+  /// Returns game catalog from local gateway for assignment mode.
   @override
   Future<List<CPGameDto>> getGames() async {
-    final List<CPGameDto>? cached = _cache.get();
-    if (cached != null) {
-      return cached;
+    if (const bool.fromEnvironment('cp.useRemoteGames')) {
+      return _apiGateway.fetchGames();
     }
-
-    final List<CPGameDto> loaded = await _dataSource.loadGames();
-    _cache.put(loaded, CPAppConstants.gamesCacheTtl);
-    return loaded;
-  }
-
-  /// Clears persisted catalog cache.
-  @override
-  void clearCache() {
-    _cache.clear();
+    return _localGateway.loadGames();
   }
 }

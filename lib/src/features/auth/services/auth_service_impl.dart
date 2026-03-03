@@ -12,9 +12,9 @@ import 'package:local_auth/local_auth.dart';
 /// Default local auth service implementation.
 class CPAuthServiceImpl implements CPAuthService {
   /// Creates [CPAuthServiceImpl].
-  const CPAuthServiceImpl(this._repository, this._localAuth, this._executor);
+  const CPAuthServiceImpl(this._gateway, this._localAuth, this._executor);
 
-  final CPAuthLocalGateway _repository;
+  final CPAuthLocalGateway _gateway;
   final LocalAuthentication _localAuth;
   final CPGuardedExecutor _executor;
 
@@ -27,7 +27,7 @@ class CPAuthServiceImpl implements CPAuthService {
     return _executor.run(() async {
       final String normalizedEmail = email.trim().toLowerCase();
       final CPLocalUserDto? existing =
-          await _repository.getUserByEmail(normalizedEmail);
+          await _gateway.getUserByEmail(normalizedEmail);
       if (existing != null) {
         throw const CPAuthException(code: CPAuthErrorCode.emailExists);
       }
@@ -41,8 +41,8 @@ class CPAuthServiceImpl implements CPAuthService {
         createdAtIso: now.toIso8601String(),
       );
 
-      await _repository.saveUser(dto);
-      await _repository.saveSession(normalizedEmail);
+      await _gateway.saveUser(dto);
+      await _gateway.saveSession(normalizedEmail);
 
       return _toSession(dto);
     });
@@ -56,7 +56,7 @@ class CPAuthServiceImpl implements CPAuthService {
     return _executor.run(() async {
       final String normalizedEmail = email.trim().toLowerCase();
       final CPLocalUserDto? user =
-          await _repository.getUserByEmail(normalizedEmail);
+          await _gateway.getUserByEmail(normalizedEmail);
       if (user == null) {
         throw const CPAuthException(code: CPAuthErrorCode.invalidCredentials);
       }
@@ -66,7 +66,7 @@ class CPAuthServiceImpl implements CPAuthService {
         throw const CPAuthException(code: CPAuthErrorCode.invalidCredentials);
       }
 
-      await _repository.saveSession(normalizedEmail);
+      await _gateway.saveSession(normalizedEmail);
       return _toSession(user);
     });
   }
@@ -74,14 +74,13 @@ class CPAuthServiceImpl implements CPAuthService {
   @override
   Future<CPUserSession?> restoreSession() async {
     return _executor.run(() async {
-      final String? sessionEmail = await _repository.getSessionEmail();
+      final String? sessionEmail = await _gateway.getSessionEmail();
       if (sessionEmail == null || sessionEmail.isEmpty) {
         return null;
       }
-      final CPLocalUserDto? user =
-          await _repository.getUserByEmail(sessionEmail);
+      final CPLocalUserDto? user = await _gateway.getUserByEmail(sessionEmail);
       if (user == null) {
-        await _repository.clearSession();
+        await _gateway.clearSession();
         return null;
       }
       return _toSession(user);
@@ -90,7 +89,7 @@ class CPAuthServiceImpl implements CPAuthService {
 
   @override
   Future<void> logout() {
-    return _executor.run(_repository.clearSession);
+    return _executor.run(_gateway.clearSession);
   }
 
   @override
@@ -104,11 +103,11 @@ class CPAuthServiceImpl implements CPAuthService {
   @override
   Future<void> enableBiometricForCurrentSession() async {
     await _executor.run(() async {
-      final String? email = await _repository.getSessionEmail();
+      final String? email = await _gateway.getSessionEmail();
       if (email == null || email.isEmpty) {
         throw const CPAuthException(code: CPAuthErrorCode.authRequired);
       }
-      await _repository.saveBiometricEmail(email);
+      await _gateway.saveBiometricEmail(email);
     });
   }
 
@@ -120,7 +119,7 @@ class CPAuthServiceImpl implements CPAuthService {
         return null;
       }
 
-      final String? biometricEmail = await _repository.getBiometricEmail();
+      final String? biometricEmail = await _gateway.getBiometricEmail();
       if (biometricEmail == null || biometricEmail.isEmpty) {
         return null;
       }
@@ -137,12 +136,12 @@ class CPAuthServiceImpl implements CPAuthService {
       }
 
       final CPLocalUserDto? user =
-          await _repository.getUserByEmail(biometricEmail);
+          await _gateway.getUserByEmail(biometricEmail);
       if (user == null) {
         return null;
       }
 
-      await _repository.saveSession(user.email);
+      await _gateway.saveSession(user.email);
       return _toSession(user);
     });
   }

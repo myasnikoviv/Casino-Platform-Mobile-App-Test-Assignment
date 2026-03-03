@@ -3,6 +3,9 @@ abstract final class CPAppConstants {
   /// Key used to persist a currently active session email.
   static const String sessionEmailKey = 'session_email';
 
+  /// Key used to persist a biometric quick-login email.
+  static const String biometricEmailKey = 'biometric_email';
+
   /// Hive box name where users are persisted.
   static const String usersBoxName = 'users_secure_box';
 

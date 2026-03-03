@@ -4,6 +4,7 @@ import 'package:casino_platform_test/src/core/storage/hive_secure_box_factory.da
 import 'package:casino_platform_test/src/core/storage/secure_storage_service.dart';
 import 'package:casino_platform_test/src/features/auth/data/dto/local_user_dto.dart';
 import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway.dart';
+import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

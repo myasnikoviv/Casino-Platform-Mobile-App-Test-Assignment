@@ -2,11 +2,13 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
 import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
+import 'package:casino_platform_test/src/features/games/adapters/game_view_model_adapter.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_cubit.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_state.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service_impl.dart';
 import 'package:casino_platform_test/src/shared/enums/game_category.dart';
 import 'package:casino_platform_test/src/shared/enums/volatility_level.dart';
@@ -27,8 +29,10 @@ void main() {
         CPGamesServiceImpl(
           CPGamesGatewayImpl(
             _SuccessGamesSource(),
-            CPMemoryTtlCache<List<CPGameDto>>(),
+            const _NoopApiGateway(),
           ),
+          CPMemoryTtlCache<List<CPGameDto>>(),
+          const CPGameViewModelAdapter(),
           CPGuardedExecutor(),
         ),
       ),
@@ -46,8 +50,10 @@ void main() {
         CPGamesServiceImpl(
           CPGamesGatewayImpl(
             _FailureGamesSource(),
-            CPMemoryTtlCache<List<CPGameDto>>(),
+            const _NoopApiGateway(),
           ),
+          CPMemoryTtlCache<List<CPGameDto>>(),
+          const CPGameViewModelAdapter(),
           CPGuardedExecutor(),
         ),
       ),
@@ -61,7 +67,7 @@ void main() {
   });
 }
 
-class _SuccessGamesSource extends CPGamesJsonDataSource {
+class _SuccessGamesSource implements CPGamesLocalGateway {
   @override
   Future<List<CPGameDto>> loadGames() async {
     return const <CPGameDto>[
@@ -80,9 +86,16 @@ class _SuccessGamesSource extends CPGamesJsonDataSource {
   }
 }
 
-class _FailureGamesSource extends CPGamesJsonDataSource {
+class _FailureGamesSource implements CPGamesLocalGateway {
   @override
   Future<List<CPGameDto>> loadGames() async {
     throw Exception('load failed');
   }
+}
+
+class _NoopApiGateway implements CPGamesApiGateway {
+  const _NoopApiGateway();
+
+  @override
+  Future<List<CPGameDto>> fetchGames() async => const <CPGameDto>[];
 }
