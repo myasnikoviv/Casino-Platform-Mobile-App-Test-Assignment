@@ -8,7 +8,7 @@
     "volatility": "high",
     "description": "A colorful slot with cascading reels and tumbling multipliers. Land candy symbols to trigger sweet bonuses and free spins.",
     "thumbnailUrl": "https://picsum.photos/seed/sweet-bonanza/400/400",
-    "headerUrl": "https://picsum.photos/seed/sweet-bonanza-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/sweet-bonanza/1200/700"
   },
   {
     "id": "g2",
@@ -19,7 +19,7 @@
     "volatility": "high",
     "description": "A mythological slot featuring multipliers and free spins in a high-volatility setup. Zeus can drop random multipliers at any moment.",
     "thumbnailUrl": "https://picsum.photos/seed/gates-olympus/400/400",
-    "headerUrl": "https://picsum.photos/seed/gates-olympus-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/gates-olympus/1200/700"
   },
   {
     "id": "g3",
@@ -30,7 +30,7 @@
     "volatility": "low",
     "description": "Live roulette with random multiplier numbers and fast-paced rounds. Designed for players who want a classic table feel with modern visuals.",
     "thumbnailUrl": "https://picsum.photos/seed/lightning-roulette/400/400",
-    "headerUrl": "https://picsum.photos/seed/lightning-roulette-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/lightning-roulette/1200/700"
   },
   {
     "id": "g4",
@@ -41,7 +41,7 @@
     "volatility": "medium",
     "description": "A game-show style live casino title with bonus wheels and random multipliers. Every spin can unlock unique bonus mini-games.",
     "thumbnailUrl": "https://picsum.photos/seed/crazy-time/400/400",
-    "headerUrl": "https://picsum.photos/seed/crazy-time-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/crazy-time/1200/700"
   },
   {
     "id": "g5",
@@ -52,7 +52,7 @@
     "volatility": "high",
     "description": "Adventure-themed slot with expanding symbols during free spins. A strong pick for players who enjoy high-risk, high-reward sessions.",
     "thumbnailUrl": "https://picsum.photos/seed/book-of-dead/400/400",
-    "headerUrl": "https://picsum.photos/seed/book-of-dead-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/book-of-dead/1200/700"
   },
   {
     "id": "g6",
@@ -63,7 +63,7 @@
     "volatility": "low",
     "description": "A classic and easy-to-understand slot with expanding wilds and respins. Popular for smooth gameplay and simple mechanics.",
     "thumbnailUrl": "https://picsum.photos/seed/starburst/400/400",
-    "headerUrl": "https://picsum.photos/seed/starburst-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/starburst/1200/700"
   },
   {
     "id": "g7",
@@ -74,7 +74,7 @@
     "volatility": "medium",
     "description": "Iconic avalanche mechanic with increasing multipliers in free-fall wins. A balanced slot with a strong visual identity.",
     "thumbnailUrl": "https://picsum.photos/seed/gonzos-quest/400/400",
-    "headerUrl": "https://picsum.photos/seed/gonzos-quest-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/gonzos-quest/1200/700"
   },
   {
     "id": "g8",
@@ -85,7 +85,7 @@
     "volatility": "medium",
     "description": "Progressive jackpot slot known for massive top prizes. Lower RTP, but designed around life-changing jackpot potential.",
     "thumbnailUrl": "https://picsum.photos/seed/mega-moolah/400/400",
-    "headerUrl": "https://picsum.photos/seed/mega-moolah-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/mega-moolah/1200/700"
   },
   {
     "id": "g9",
@@ -96,7 +96,7 @@
     "volatility": "low",
     "description": "Traditional blackjack table with familiar rules and polished UI. Great for low-volatility card gameplay.",
     "thumbnailUrl": "https://picsum.photos/seed/blackjack-classic/400/400",
-    "headerUrl": "https://picsum.photos/seed/blackjack-classic-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/blackjack-classic/1200/700"
   },
   {
     "id": "g10",
@@ -107,7 +107,7 @@
     "volatility": "high",
     "description": "Cluster-based slot with feature-rich chain reactions and random modifiers. Dynamic rounds and vivid animations.",
     "thumbnailUrl": "https://picsum.photos/seed/reactoonz/400/400",
-    "headerUrl": "https://picsum.photos/seed/reactoonz-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/reactoonz/1200/700"
   },
   {
     "id": "g11",
@@ -118,7 +118,7 @@
     "volatility": "medium",
     "description": "Wild west themed slot with money respin and free spin bonuses. A balanced profile suitable for broad audiences.",
     "thumbnailUrl": "https://picsum.photos/seed/wolf-gold/400/400",
-    "headerUrl": "https://picsum.photos/seed/wolf-gold-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/wolf-gold/1200/700"
   },
   {
     "id": "g12",
@@ -129,6 +129,6 @@
     "volatility": "low",
     "description": "Live roulette product with cinematic camera angles and polished studio production. Built for premium live-table experience.",
     "thumbnailUrl": "https://picsum.photos/seed/immersive-roulette/400/400",
-    "headerUrl": "https://picsum.photos/seed/immersive-roulette-header/1200/700"
+    "headerUrl": "https://picsum.photos/seed/immersive-roulette/1200/700"
   }
 ]

@@ -16,7 +16,7 @@ abstract final class CPAppConstants {
   static const String cacheBoxName = 'cache_box';
 
   /// Hive cache key for games catalog snapshot.
-  static const String gamesCacheKey = 'games_cache';
+  static const String gamesCacheKey = 'games_cache_v2';
 
   /// TTL for game catalog cache.
   static const Duration gamesCacheTtl = Duration(minutes: 5);
