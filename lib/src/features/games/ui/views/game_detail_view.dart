@@ -1,4 +1,5 @@
 import 'package:casino_platform_test/src/core/theme/app_text_styles.dart';
+import 'package:casino_platform_test/src/features/games/ui/components/game_hero.dart';
 import 'package:casino_platform_test/src/features/games/ui/components/game_detail_metrics.dart';
 import 'package:casino_platform_test/src/features/games/ui/view_models/game_view_model.dart';
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
@@ -26,8 +27,8 @@ class CPGameDetailView extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             height: 250.h,
-            child: Hero(
-              tag: 'game-image-${game.id}',
+            child: CPGameImageHero(
+              gameId: game.id,
               child: Image.network(game.headerUrl, fit: BoxFit.cover),
             ),
           ),

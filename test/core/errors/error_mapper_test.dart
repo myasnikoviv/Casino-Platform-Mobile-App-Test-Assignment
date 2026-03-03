@@ -1,6 +1,7 @@
 import 'package:casino_platform_test/l10n/app_localizations.dart';
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
-import 'package:casino_platform_test/src/core/errors/error_mapper.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/exception_codes.dart';
+import 'package:casino_platform_test/src/core/exceptions/error_mapper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,7 +16,7 @@ void main() {
 
     test('maps validation code to localized message', () {
       final String message = mapper.mapToMessage(
-        const CPValidationException(code: 'invalidEmail'),
+        const CPValidationException(code: CPValidationErrorCode.invalidEmail),
         l10n,
       );
 

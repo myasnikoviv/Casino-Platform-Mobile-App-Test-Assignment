@@ -1,4 +1,5 @@
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
+import 'package:casino_platform_test/src/shared/ui/app_navigation_destination.dart';
 import 'package:casino_platform_test/src/shared/ui/icons/icons.dart';
 import 'package:flutter/material.dart';
 
@@ -24,19 +25,19 @@ class CPMainShellView extends StatelessWidget {
         selectedIndex: index,
         onDestinationSelected: onIndexChanged,
         destinations: <NavigationDestination>[
-          NavigationDestination(
-            icon: const Icon(CPIcons.homeOutlined),
-            selectedIcon: const Icon(CPIcons.home),
+          CPAppNavigationDestination(
+            iconType: CPIconType.homeOutlined,
+            selectedIconType: CPIconType.home,
             label: context.l10n.homeTab,
           ),
-          NavigationDestination(
-            icon: const Icon(CPIcons.gamesOutlined),
-            selectedIcon: const Icon(CPIcons.games),
+          CPAppNavigationDestination(
+            iconType: CPIconType.gamesOutlined,
+            selectedIconType: CPIconType.games,
             label: context.l10n.gamesTab,
           ),
-          NavigationDestination(
-            icon: const Icon(CPIcons.profileOutlined),
-            selectedIcon: const Icon(CPIcons.profile),
+          CPAppNavigationDestination(
+            iconType: CPIconType.profileOutlined,
+            selectedIconType: CPIconType.profile,
             label: context.l10n.profileTab,
           ),
         ],

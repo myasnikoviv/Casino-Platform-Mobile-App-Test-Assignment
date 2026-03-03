@@ -1,6 +1,6 @@
 import 'package:casino_platform_test/src/core/router/extensions/context.dart';
 import 'package:casino_platform_test/src/core/router/route_paths.dart';
-import 'package:casino_platform_test/src/features/auth/entities/biometric_setup_view_model.dart';
+import 'package:casino_platform_test/src/features/auth/ui/view_models/biometric_setup_view_model.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
 import 'package:casino_platform_test/src/features/auth/ui/screens/login_screen.dart';

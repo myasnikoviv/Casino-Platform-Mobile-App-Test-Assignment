@@ -1,5 +1,5 @@
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
-import 'package:casino_platform_test/src/core/errors/error_mapper.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/error_mapper.dart';
 import 'package:casino_platform_test/src/core/router/extensions/context.dart';
 import 'package:casino_platform_test/src/core/utils/password_generator.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
@@ -13,6 +13,7 @@ import 'package:casino_platform_test/src/features/auth/ui/screens/login_screen.d
 import 'package:casino_platform_test/src/features/auth/ui/screens/password_review_screen.dart';
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
 import 'package:casino_platform_test/src/shared/ui/app_button.dart';
+import 'package:casino_platform_test/src/shared/ui/app_text_button.dart';
 import 'package:casino_platform_test/src/shared/ui/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -155,9 +156,9 @@ class _CPSignUpViewState extends State<CPSignUpView> {
                 ),
               ),
               SizedBox(height: 8.h),
-              TextButton(
+              CPAppTextButton(
                 onPressed: _onGeneratePasswordTap,
-                child: Text(context.l10n.generatePassword),
+                label: context.l10n.generatePassword,
               ),
               SizedBox(height: 8.h),
               CPAppButton(
@@ -166,9 +167,9 @@ class _CPSignUpViewState extends State<CPSignUpView> {
                 isLoading: state.isBusy,
               ),
               SizedBox(height: 10.h),
-              TextButton(
+              CPAppTextButton(
                 onPressed: _onLoginTap,
-                child: Text(context.l10n.loginLink),
+                label: context.l10n.loginLink,
               ),
             ],
           ),

@@ -1,4 +1,3 @@
-import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +14,6 @@ void main() {
     ) async {
       final CPAuthCubit cubit = CPAuthCubit(
         CPFakeAuthService(loginResult: testSession),
-        CPGuardedExecutor(),
       );
       await cubit.login('alex@example.com', 'Password123!');
 

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:casino_platform_test/src/core/theme/app_text_styles.dart';
+import 'package:casino_platform_test/src/features/games/ui/components/game_hero.dart';
 import 'package:casino_platform_test/src/features/games/ui/view_models/game_view_model.dart';
 import 'package:casino_platform_test/src/shared/ui/app_badge.dart';
 import 'package:flutter/material.dart';
@@ -75,8 +76,8 @@ class _CPGameCardState extends State<CPGameCard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child: Hero(
-                  tag: 'game-image-${widget.game.id}',
+                child: CPGameImageHero(
+                  gameId: widget.game.id,
                   child: Image.network(
                     widget.game.thumbnailUrl,
                     width: double.infinity,

@@ -1,4 +1,4 @@
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
 
 /// Centralized try/catch wrapper to keep error handling consistent.
 class CPGuardedExecutor {

@@ -1,5 +1,4 @@
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
-import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
 import 'package:casino_platform_test/src/features/auth/entities/user_session.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
@@ -8,19 +7,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Global auth cubit handling login, registration and session lifecycle.
 class CPAuthCubit extends Cubit<CPAuthState> {
   /// Creates [CPAuthCubit].
-  CPAuthCubit(this._authService, this._executor)
-      : super(const CPAuthUnknownState());
+  CPAuthCubit(this._authService) : super(const CPAuthUnknownState());
 
   final CPAuthService _authService;
-  final CPGuardedExecutor _executor;
+  bool _initialized = false;
 
   /// Restores saved session and device auth capabilities.
   Future<void> initialize() async {
+    if (_initialized) {
+      return;
+    }
+    _initialized = true;
     emit(CPAuthUnknownState(isBusy: true));
     try {
       final bool bioAvailable = await _authService.canUseBiometrics();
-      final CPUserSession? session =
-          await _executor.run(_authService.restoreSession);
+      final CPUserSession? session = await _authService.restoreSession();
       if (session == null) {
         emit(CPUnauthenticatedState(biometricsAvailable: bioAvailable));
       } else {
@@ -41,9 +42,8 @@ class CPAuthCubit extends Cubit<CPAuthState> {
     final bool bio = state.biometricsAvailable;
     emit(CPUnauthenticatedState(isBusy: true, biometricsAvailable: bio));
     try {
-      final CPUserSession session = await _executor.run(
-        () => _authService.login(email: email, password: password),
-      );
+      final CPUserSession session =
+          await _authService.login(email: email, password: password);
       emit(CPAuthenticatedState(session: session, biometricsAvailable: bio));
     } on CPAppException catch (error) {
       emit(CPUnauthenticatedState(error: error, biometricsAvailable: bio));
@@ -55,9 +55,10 @@ class CPAuthCubit extends Cubit<CPAuthState> {
     final bool bio = state.biometricsAvailable;
     emit(CPUnauthenticatedState(isBusy: true, biometricsAvailable: bio));
     try {
-      final CPUserSession session = await _executor.run(
-        () => _authService.register(
-            fullName: name, email: email, password: password),
+      final CPUserSession session = await _authService.register(
+        fullName: name,
+        email: email,
+        password: password,
       );
       emit(CPAuthenticatedState(session: session, biometricsAvailable: bio));
     } on CPAppException catch (error) {
@@ -69,7 +70,7 @@ class CPAuthCubit extends Cubit<CPAuthState> {
   Future<void> logout() async {
     final bool bio = state.biometricsAvailable;
     emit(CPUnauthenticatedState(isBusy: true, biometricsAvailable: bio));
-    await _executor.run(_authService.logout);
+    await _authService.logout();
     emit(CPUnauthenticatedState(biometricsAvailable: bio));
   }
 
@@ -78,8 +79,7 @@ class CPAuthCubit extends Cubit<CPAuthState> {
     final bool bio = state.biometricsAvailable;
     emit(CPUnauthenticatedState(isBusy: true, biometricsAvailable: bio));
     try {
-      final CPUserSession? session =
-          await _executor.run(_authService.loginWithBiometrics);
+      final CPUserSession? session = await _authService.loginWithBiometrics();
       if (session == null) {
         emit(CPUnauthenticatedState(biometricsAvailable: bio));
         return;
@@ -104,7 +104,7 @@ class CPAuthCubit extends Cubit<CPAuthState> {
     emit(CPAuthenticatedState(
         session: session, isBusy: true, biometricsAvailable: bio));
     try {
-      await _executor.run(_authService.enableBiometricForCurrentSession);
+      await _authService.enableBiometricForCurrentSession();
       emit(CPAuthenticatedState(session: session, biometricsAvailable: bio));
     } on CPAppException catch (error) {
       emit(CPAuthenticatedState(

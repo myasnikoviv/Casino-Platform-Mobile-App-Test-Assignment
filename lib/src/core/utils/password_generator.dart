@@ -1,7 +1,9 @@
 import 'dart:math';
 
 /// Utility for generating strong random passwords.
-abstract final class CPPasswordGenerator {
+final class CPPasswordGenerator {
+  const CPPasswordGenerator._();
+
   static const String _alphabet =
       'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#%^&*';
 

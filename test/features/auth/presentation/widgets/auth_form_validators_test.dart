@@ -1,4 +1,5 @@
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/exception_codes.dart';
 import 'package:casino_platform_test/src/features/auth/ui/components/auth_form_validators.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -27,7 +28,7 @@ void main() {
           isA<CPValidationException>().having(
             (CPValidationException e) => e.code,
             'code',
-            'invalidEmail',
+            CPValidationErrorCode.invalidEmail,
           ),
         ),
       );
@@ -40,7 +41,7 @@ void main() {
           isA<CPValidationException>().having(
             (CPValidationException e) => e.code,
             'code',
-            'passwordTooShort',
+            CPValidationErrorCode.passwordTooShort,
           ),
         ),
       );
@@ -54,7 +55,7 @@ void main() {
           isA<CPValidationException>().having(
             (CPValidationException e) => e.code,
             'code',
-            'passwordsDoNotMatch',
+            CPValidationErrorCode.passwordsDoNotMatch,
           ),
         ),
       );

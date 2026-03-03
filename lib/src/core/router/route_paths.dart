@@ -22,7 +22,4 @@ class CPRoutePath {
 abstract final class CPRoutePaths {
   /// Auth root route.
   static const String authRoot = '/auth';
-
-  /// Main shell root route.
-  static const String mainRoot = '/main';
 }

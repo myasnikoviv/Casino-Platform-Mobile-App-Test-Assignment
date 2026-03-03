@@ -36,7 +36,11 @@ class CPAppErrorState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(CPIcons.warning, color: CPAppColors.warning, size: 28.sp),
+          const CPIcon(
+            type: CPIconType.warning,
+            color: CPAppColors.warning,
+            size: 28,
+          ),
           SizedBox(height: 8.h),
           Text(message,
               style: CPAppTextStyles.body, textAlign: TextAlign.center),

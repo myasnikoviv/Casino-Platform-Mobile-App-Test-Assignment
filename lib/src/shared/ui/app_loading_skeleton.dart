@@ -39,7 +39,7 @@ class _CPAppLoadingSkeletonState extends State<CPAppLoadingSkeleton>
       builder: (context, child) {
         return Container(
           width: double.infinity,
-          height: widget.height,
+          height: widget.height.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.r),
             color: Color.lerp(

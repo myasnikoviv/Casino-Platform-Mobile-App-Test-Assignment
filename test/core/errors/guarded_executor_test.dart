@@ -1,5 +1,6 @@
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
-import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/exception_codes.dart';
+import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -14,7 +15,9 @@ void main() {
     test('rethrows CPAppException as-is', () async {
       expect(
         () => executor.run<int>(
-          () async => throw const CPValidationException(code: 'emptyField'),
+          () async => throw const CPValidationException(
+            code: CPValidationErrorCode.emptyField,
+          ),
         ),
         throwsA(isA<CPValidationException>()),
       );

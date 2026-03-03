@@ -1,5 +1,6 @@
 import 'package:casino_platform_test/src/core/theme/app_colors.dart';
 import 'package:casino_platform_test/src/core/theme/app_text_styles.dart';
+import 'package:casino_platform_test/src/shared/ui/icons/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,7 +25,7 @@ class CPAppButton extends StatelessWidget {
   final bool isLoading;
 
   /// Optional leading icon.
-  final IconData? icon;
+  final CPIconType? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class CPAppButton extends StatelessWidget {
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  if (icon != null) Icon(icon, size: 18.sp),
+                  if (icon != null) CPIcon(type: icon!, size: 18),
                   if (icon != null) SizedBox(width: 8.w),
                   Text(label,
                       style:

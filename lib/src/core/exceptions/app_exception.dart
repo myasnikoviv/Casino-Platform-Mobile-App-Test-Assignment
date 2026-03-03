@@ -1,3 +1,5 @@
+import 'package:casino_platform_test/src/core/exceptions/exception_codes.dart';
+
 /// Base exception contract for all known domain/infrastructure failures.
 sealed class CPAppException implements Exception {
   /// Creates [CPAppException] with optional details.
@@ -12,8 +14,8 @@ class CPValidationException extends CPAppException {
   /// Creates [CPValidationException].
   const CPValidationException({required this.code, super.message});
 
-  /// Localization key for user-facing validation feedback.
-  final String code;
+  /// Strongly typed validation code.
+  final CPValidationErrorCode code;
 }
 
 /// Indicates authentication failures.
@@ -21,8 +23,8 @@ class CPAuthException extends CPAppException {
   /// Creates [CPAuthException].
   const CPAuthException({required this.code, super.message});
 
-  /// Localization key for user-facing auth feedback.
-  final String code;
+  /// Strongly typed auth code.
+  final CPAuthErrorCode code;
 }
 
 /// Indicates storage/read-write errors.

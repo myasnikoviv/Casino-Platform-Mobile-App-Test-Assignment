@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
-import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/exception_codes.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,7 +17,6 @@ void main() {
           canUseBiometricsResult: true,
           restoreResult: testSession,
         ),
-        CPGuardedExecutor(),
       ),
       act: (CPAuthCubit cubit) => cubit.initialize(),
       expect: () => <Matcher>[
@@ -32,7 +31,6 @@ void main() {
       'login emits authenticated on success',
       build: () => CPAuthCubit(
         CPFakeAuthService(loginResult: testSession),
-        CPGuardedExecutor(),
       ),
       act: (CPAuthCubit cubit) =>
           cubit.login('alex@example.com', 'Password123!'),
@@ -47,9 +45,10 @@ void main() {
       'login emits error when auth fails',
       build: () => CPAuthCubit(
         CPFakeAuthService(
-          loginError: const CPAuthException(code: 'invalidCredentials'),
+          loginError: const CPAuthException(
+            code: CPAuthErrorCode.invalidCredentials,
+          ),
         ),
-        CPGuardedExecutor(),
       ),
       act: (CPAuthCubit cubit) => cubit.login('alex@example.com', 'bad'),
       expect: () => <Matcher>[
@@ -63,7 +62,6 @@ void main() {
       'logout emits unauthenticated state',
       build: () => CPAuthCubit(
         CPFakeAuthService(loginResult: testSession),
-        CPGuardedExecutor(),
       ),
       seed: () => const CPAuthenticatedState(session: testSession),
       act: (CPAuthCubit cubit) => cubit.logout(),

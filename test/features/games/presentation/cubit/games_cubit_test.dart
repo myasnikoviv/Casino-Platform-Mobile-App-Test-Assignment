@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
+import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_cubit.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_state.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
@@ -23,11 +24,12 @@ void main() {
     blocTest<CPGamesCubit, CPGamesState>(
       'emits success with mapped games',
       build: () => CPGamesCubit(
-        CPGamesService(
-          CPGamesGateway(
+        CPGamesServiceImpl(
+          CPGamesGatewayImpl(
             _SuccessGamesSource(),
-            CPTtlCache<List<CPGameDto>>(),
+            CPMemoryTtlCache<List<CPGameDto>>(),
           ),
+          CPGuardedExecutor(),
         ),
       ),
       act: (CPGamesCubit cubit) => cubit.loadGames(l10n),
@@ -41,11 +43,12 @@ void main() {
     blocTest<CPGamesCubit, CPGamesState>(
       'emits error when service fails',
       build: () => CPGamesCubit(
-        CPGamesService(
-          CPGamesGateway(
+        CPGamesServiceImpl(
+          CPGamesGatewayImpl(
             _FailureGamesSource(),
-            CPTtlCache<List<CPGameDto>>(),
+            CPMemoryTtlCache<List<CPGameDto>>(),
           ),
+          CPGuardedExecutor(),
         ),
       ),
       act: (CPGamesCubit cubit) => cubit.loadGames(l10n),

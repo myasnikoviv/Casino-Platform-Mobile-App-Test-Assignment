@@ -57,4 +57,19 @@ class CPGameDto {
       headerUrl: json['headerUrl'] as String,
     );
   }
+
+  /// Converts DTO to JSON map.
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'category': category.rawValue,
+      'provider': provider,
+      'rtp': rtp,
+      'volatility': volatility.rawValue,
+      'description': description,
+      'thumbnailUrl': thumbnailUrl,
+      'headerUrl': headerUrl,
+    };
+  }
 }

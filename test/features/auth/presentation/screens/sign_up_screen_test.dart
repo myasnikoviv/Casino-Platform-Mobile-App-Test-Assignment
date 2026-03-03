@@ -1,4 +1,3 @@
-import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/ui/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,7 @@ void main() {
     testWidgets('shows mismatch error when passwords differ', (
       WidgetTester tester,
     ) async {
-      final CPAuthCubit cubit =
-          CPAuthCubit(CPFakeAuthService(), CPGuardedExecutor());
+      final CPAuthCubit cubit = CPAuthCubit(CPFakeAuthService());
 
       await tester.pumpWidget(
         CPTestApp(

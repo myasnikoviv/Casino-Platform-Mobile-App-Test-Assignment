@@ -1,23 +1,35 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/// Thin wrapper for secure key/value persistence.
-class CPSecureStorageService {
-  /// Creates secure storage service.
-  const CPSecureStorageService(this._storage);
+/// Contract for secure key/value persistence.
+abstract interface class CPSecureStorageService {
+  /// Reads value by [key].
+  Future<String?> read(String key);
+
+  /// Writes [value] by [key].
+  Future<void> write(String key, String value);
+
+  /// Deletes value by [key].
+  Future<void> delete(String key);
+}
+
+/// Flutter secure storage implementation.
+class CPSecureStorageServiceImpl implements CPSecureStorageService {
+  /// Creates [CPSecureStorageServiceImpl].
+  const CPSecureStorageServiceImpl(this._storage);
 
   final FlutterSecureStorage _storage;
 
-  /// Reads value by [key] from secure storage.
+  @override
   Future<String?> read(String key) {
     return _storage.read(key: key);
   }
 
-  /// Writes [value] by [key] into secure storage.
+  @override
   Future<void> write(String key, String value) {
     return _storage.write(key: key, value: value);
   }
 
-  /// Deletes value by [key] from secure storage.
+  @override
   Future<void> delete(String key) {
     return _storage.delete(key: key);
   }

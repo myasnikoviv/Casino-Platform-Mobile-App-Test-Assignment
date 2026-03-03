@@ -1,5 +1,5 @@
 import 'package:casino_platform_test/src/core/theme/app_text_styles.dart';
-import 'package:casino_platform_test/src/features/auth/entities/biometric_setup_view_model.dart';
+import 'package:casino_platform_test/src/features/auth/ui/view_models/biometric_setup_view_model.dart';
 import 'package:casino_platform_test/src/features/auth/ui/components/auth_screen_container.dart';
 import 'package:casino_platform_test/src/shared/ui/app_button.dart';
 import 'package:casino_platform_test/src/shared/ui/icons/icons.dart';
@@ -39,7 +39,7 @@ class CPBiometricSetupView extends StatelessWidget {
           CPAppButton(
             label: viewModel.enableLabel,
             onPressed: onEnableTap,
-            icon: CPIcons.fingerprint,
+            icon: CPIconType.fingerprint,
             isLoading: viewModel.isLoading,
           ),
           SizedBox(height: 10.h),

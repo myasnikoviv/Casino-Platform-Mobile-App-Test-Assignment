@@ -49,7 +49,7 @@ class CPPasswordReviewView extends StatelessWidget {
         CPAppButton(
           label: copyLabel,
           onPressed: onCopyTap,
-          icon: CPIcons.copy,
+          icon: CPIconType.copy,
         ),
         SizedBox(height: 12.h),
         CPAppButton(

@@ -1,4 +1,4 @@
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
 import 'package:casino_platform_test/src/features/auth/entities/user_session.dart';
 import 'package:equatable/equatable.dart';
 

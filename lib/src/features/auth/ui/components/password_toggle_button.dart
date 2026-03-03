@@ -1,3 +1,4 @@
+import 'package:casino_platform_test/src/shared/ui/app_text_button.dart';
 import 'package:flutter/material.dart';
 
 /// Toggle action for obscured password fields.
@@ -25,9 +26,9 @@ class CPPasswordToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return CPAppTextButton(
+      label: isVisible ? hideLabel : showLabel,
       onPressed: onTap,
-      child: Text(isVisible ? hideLabel : showLabel),
     );
   }
 }

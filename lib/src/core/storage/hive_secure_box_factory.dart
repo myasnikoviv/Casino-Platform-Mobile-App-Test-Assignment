@@ -6,14 +6,21 @@ import 'package:casino_platform_test/src/core/constants/app_constants.dart';
 import 'package:casino_platform_test/src/core/storage/secure_storage_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+/// Contract for encrypted box creation.
+abstract interface class CPSecureBoxFactory {
+  /// Opens encrypted box by [name].
+  Future<Box<dynamic>> openEncryptedBox(String name);
+}
+
 /// Creates encrypted Hive boxes using a key persisted in secure storage.
-class CPHiveSecureBoxFactory {
+class CPHiveSecureBoxFactory implements CPSecureBoxFactory {
   /// Creates secure Hive box factory.
   const CPHiveSecureBoxFactory(this._secureStorageService);
 
   final CPSecureStorageService _secureStorageService;
 
   /// Opens encrypted box by [name].
+  @override
   Future<Box<dynamic>> openEncryptedBox(String name) async {
     final List<int> key = await _loadOrGenerateKey();
     return Hive.openBox<dynamic>(

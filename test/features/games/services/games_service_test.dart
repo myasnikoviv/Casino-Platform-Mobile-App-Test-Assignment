@@ -1,5 +1,6 @@
 import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
+import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
 import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
@@ -18,8 +19,8 @@ void main() {
     });
 
     test('adapts dto fields into localized view model', () async {
-      final CPGamesService service = CPGamesService(
-        CPGamesGateway(
+      final CPGamesService service = CPGamesServiceImpl(
+        CPGamesGatewayImpl(
           _StaticGamesSource(
             const <CPGameDto>[
               CPGameDto(
@@ -35,8 +36,9 @@ void main() {
               ),
             ],
           ),
-          CPTtlCache<List<CPGameDto>>(),
+          CPMemoryTtlCache<List<CPGameDto>>(),
         ),
+        CPGuardedExecutor(),
       );
 
       final games = await service.getGames(l10n);
@@ -48,11 +50,12 @@ void main() {
     });
 
     test('returns null when game id is missing', () async {
-      final CPGamesService service = CPGamesService(
-        CPGamesGateway(
+      final CPGamesService service = CPGamesServiceImpl(
+        CPGamesGatewayImpl(
           _StaticGamesSource(const <CPGameDto>[]),
-          CPTtlCache<List<CPGameDto>>(),
+          CPMemoryTtlCache<List<CPGameDto>>(),
         ),
+        CPGuardedExecutor(),
       );
 
       final result = await service.getGameById('missing', l10n);

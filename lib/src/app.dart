@@ -1,5 +1,5 @@
-import 'package:casino_platform_test/src/core/di/di.dart';
 import 'package:casino_platform_test/l10n/app_localizations.dart';
+import 'package:casino_platform_test/src/core/di/di.dart';
 import 'package:casino_platform_test/src/core/router/app_router.dart';
 import 'package:casino_platform_test/src/core/theme/app_theme.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
@@ -9,27 +9,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Root app widget.
-class CPCasinoApp extends StatefulWidget {
+class CPCasinoApp extends StatelessWidget {
   /// Creates [CPCasinoApp].
   const CPCasinoApp({super.key});
 
   @override
-  State<CPCasinoApp> createState() => _CPCasinoAppState();
-}
-
-class _CPCasinoAppState extends State<CPCasinoApp> {
-  final (CPAuthCubit, CPRouter) _bootstrap = (() {
-    final CPAuthCubit authCubit = CPAuthCubit(
-      CPDI.resolveDependency(),
-      CPDI.resolveDependency(),
-    )..initialize();
-    return (authCubit, CPRouter(authCubit));
-  })();
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider<CPAuthCubit>(
-      create: (_) => _bootstrap.$1,
+      lazy: false,
+      create: (_) => CPDI.resolveDependency<CPAuthCubit>()..initialize(),
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
         minTextAdapt: true,
@@ -37,7 +25,8 @@ class _CPCasinoAppState extends State<CPCasinoApp> {
         builder: (_, __) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            title: 'Casino Platform',
+            onGenerateTitle: (BuildContext c) =>
+                AppLocalizations.of(c).appTitle,
             theme: CPAppTheme.lightTheme,
             localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
               AppLocalizations.delegate,
@@ -46,7 +35,7 @@ class _CPCasinoAppState extends State<CPCasinoApp> {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const <Locale>[Locale('en')],
-            routerConfig: _bootstrap.$2.router,
+            routerConfig: CPRouter.router,
           );
         },
       ),

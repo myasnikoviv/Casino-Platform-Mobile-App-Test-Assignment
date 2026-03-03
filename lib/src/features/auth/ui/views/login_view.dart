@@ -1,5 +1,5 @@
-import 'package:casino_platform_test/src/core/errors/app_exception.dart';
-import 'package:casino_platform_test/src/core/errors/error_mapper.dart';
+import 'package:casino_platform_test/src/core/exceptions/app_exception.dart';
+import 'package:casino_platform_test/src/core/exceptions/error_mapper.dart';
 import 'package:casino_platform_test/src/core/router/extensions/context.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
@@ -11,6 +11,7 @@ import 'package:casino_platform_test/src/features/auth/ui/components/password_to
 import 'package:casino_platform_test/src/features/auth/ui/screens/sign_up_screen.dart';
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
 import 'package:casino_platform_test/src/shared/ui/app_button.dart';
+import 'package:casino_platform_test/src/shared/ui/app_text_button.dart';
 import 'package:casino_platform_test/src/shared/ui/app_text_field.dart';
 import 'package:casino_platform_test/src/shared/ui/icons/icons.dart';
 import 'package:flutter/material.dart';
@@ -124,12 +125,12 @@ class _CPLoginViewState extends State<CPLoginView> {
                 CPAppButton(
                   label: context.l10n.enableBiometric,
                   onPressed: _onBiometricTap,
-                  icon: CPIcons.fingerprint,
+                  icon: CPIconType.fingerprint,
                 ),
               SizedBox(height: 10.h),
-              TextButton(
+              CPAppTextButton(
                 onPressed: _onSignUpTap,
-                child: Text(context.l10n.signUpLink),
+                label: context.l10n.signUpLink,
               ),
             ],
           ),

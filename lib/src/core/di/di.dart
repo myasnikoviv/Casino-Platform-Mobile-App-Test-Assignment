@@ -1,15 +1,18 @@
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
-import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
+import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:casino_platform_test/src/core/storage/hive_secure_box_factory.dart';
 import 'package:casino_platform_test/src/core/storage/secure_storage_service.dart';
+import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service_impl.dart';
+import 'package:casino_platform_test/src/core/constants/app_constants.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
+import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:local_auth/local_auth.dart';
 
 /// Dependency container with explicit register/resolve APIs.
@@ -24,33 +27,55 @@ class CPDI {
     }
 
     registerDependency<CPSecureStorageService>(
-      const CPSecureStorageService(FlutterSecureStorage()),
+      const CPSecureStorageServiceImpl(FlutterSecureStorage()),
     );
-    registerDependency<CPHiveSecureBoxFactory>(
+    registerDependency<CPSecureBoxFactory>(
       CPHiveSecureBoxFactory(resolveDependency<CPSecureStorageService>()),
     );
     registerDependency<CPAuthLocalGateway>(
-      CPAuthLocalGateway(
-        resolveDependency<CPHiveSecureBoxFactory>(),
+      CPAuthLocalGatewayImpl(
+        resolveDependency<CPSecureBoxFactory>(),
         resolveDependency<CPSecureStorageService>(),
       ),
     );
+    registerDependency<CPGuardedExecutor>(CPGuardedExecutor());
     registerDependency<CPAuthService>(
       CPAuthServiceImpl(
         resolveDependency<CPAuthLocalGateway>(),
         LocalAuthentication(),
+        resolveDependency<CPGuardedExecutor>(),
       ),
     );
-    registerDependency<CPGuardedExecutor>(CPGuardedExecutor());
+    registerDependency<CPAuthCubit>(
+      CPAuthCubit(resolveDependency<CPAuthService>()),
+    );
 
+    final Box<dynamic> cacheBox =
+        await Hive.openBox<dynamic>(CPAppConstants.cacheBoxName);
     registerDependency<CPGamesGateway>(
-      CPGamesGateway(
+      CPGamesGatewayImpl(
         const CPGamesJsonDataSource(),
-        CPTtlCache<List<CPGameDto>>(),
+        CPHiveTtlCache<List<CPGameDto>>(
+          box: cacheBox,
+          cacheKey: CPAppConstants.gamesCacheKey,
+          encode: (List<CPGameDto> value) {
+            return value.map((CPGameDto dto) => dto.toJson()).toList();
+          },
+          decode: (Object? raw) {
+            final List<dynamic> data = raw as List<dynamic>;
+            return data
+                .map((dynamic item) =>
+                    CPGameDto.fromJson(item as Map<String, dynamic>))
+                .toList();
+          },
+        ),
       ),
     );
     registerDependency<CPGamesService>(
-      CPGamesService(resolveDependency<CPGamesGateway>()),
+      CPGamesServiceImpl(
+        resolveDependency<CPGamesGateway>(),
+        resolveDependency<CPGuardedExecutor>(),
+      ),
     );
 
     _initialized = true;
