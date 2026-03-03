@@ -227,6 +227,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeTokens => 'Theme Tokens';
 
   @override
+  String get typography => 'Typography';
+
+  @override
   String get sharedWidgets => 'Shared Widgets';
 
   @override

@@ -56,6 +56,22 @@ class _CPWidgetbookViewState extends State<CPWidgetbookView> {
           ],
         ),
         SizedBox(height: 14.h),
+        Text(context.l10n.typography, style: CPAppTextStyles.h2),
+        SizedBox(height: 8.h),
+        Text(context.l10n.passwordSavedTitle, style: CPAppTextStyles.h1),
+        SizedBox(height: 6.h),
+        Text(context.l10n.gamesTab, style: CPAppTextStyles.h2),
+        SizedBox(height: 6.h),
+        Text(
+          context.l10n.passwordSavedDescription,
+          style: CPAppTextStyles.body,
+        ),
+        SizedBox(height: 6.h),
+        Text(
+          context.l10n.categorySlots,
+          style: CPAppTextStyles.label,
+        ),
+        SizedBox(height: 14.h),
         Text(context.l10n.sharedWidgets, style: CPAppTextStyles.h2),
         SizedBox(height: 8.h),
         CPAppTextField(

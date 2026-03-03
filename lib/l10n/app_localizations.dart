@@ -520,6 +520,12 @@ abstract class AppLocalizations {
   /// **'Theme Tokens'**
   String get themeTokens;
 
+  /// No description provided for @typography.
+  ///
+  /// In en, this message translates to:
+  /// **'Typography'**
+  String get typography;
+
   /// No description provided for @sharedWidgets.
   ///
   /// In en, this message translates to:
