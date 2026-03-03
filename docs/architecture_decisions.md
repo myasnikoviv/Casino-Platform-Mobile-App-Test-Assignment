@@ -85,7 +85,7 @@ Companion full specification:
 - Password save/copy checkpoint after registration with masked display (`******`) and explicit copy CTA.
 - Optional biometric one-tap login enrollment (skippable).
 - Dedicated biometric service flow via `CPBiometricGateway` + `CPAuthService` orchestration, including profile-level enable/disable guarded by biometric identity confirmation.
-- Flip tap animation + Hero continuity for game card to details transition.
+- Hero continuity for game card image to details transition.
 
 ### Why these auth UX improvements
 - The assignment uses local-only auth with no backend recovery channel, so forgotten credentials are a realistic risk.

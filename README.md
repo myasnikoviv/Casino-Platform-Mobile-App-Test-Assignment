@@ -42,7 +42,7 @@ Production-oriented implementation of a local-auth casino platform app, aligned 
   - Hero promo section with 2 banners.
   - Game grid with exactly 4 columns.
   - 12 mock games loaded from JSON.
-  - Flip animation on game card tap + Hero transition to details.
+  - Hero transition from game card image to details.
   - Hero animation conflict in tabbed layout is resolved via `HeroMode` scoping for active tab only.
   - Remote images use `CachedNetworkImage` with shimmer placeholder and graceful error fallback.
 - Game details:

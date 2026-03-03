@@ -110,7 +110,7 @@ This document describes the full technical architecture of the assignment projec
 
 ## 13) UI Reviewability Without Running App
 - Because assignment reviewers may inspect code/docs without launching the app, UI-specific decisions are explicitly documented:
-  - Hero transitions and flip interaction behavior,
+  - Hero transitions,
   - skeleton/shimmer loading behavior,
   - cached network image strategy and error fallback.
 - Dev-only Widgetbook route provides visual coverage for:
