@@ -27,7 +27,7 @@ void main() {
       await tester.tap(find.byType(ElevatedButton).first);
       await tester.pumpAndSettle();
 
-      expect(find.text('This field is required.'), findsOneWidget);
+      expect(find.textContaining('This field is required.'), findsOneWidget);
       await cubit.close();
     });
   });

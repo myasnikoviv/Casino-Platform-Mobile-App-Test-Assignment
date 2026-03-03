@@ -6,10 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// Compact warning banner for validation and domain errors.
 class CPAuthErrorBanner extends StatelessWidget {
   /// Creates [CPAuthErrorBanner].
-  const CPAuthErrorBanner({required this.message, super.key});
+  const CPAuthErrorBanner({required this.messages, super.key});
 
-  /// User-facing error text.
-  final String message;
+  /// User-facing error texts.
+  final List<String> messages;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,17 @@ class CPAuthErrorBanner extends StatelessWidget {
         color: CPAppColors.warning.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(10.r),
       ),
-      child: Text(message, style: CPAppTextStyles.body),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: messages
+            .map(
+              (String message) => Padding(
+                padding: EdgeInsets.only(bottom: 4.h),
+                child: Text('• $message', style: CPAppTextStyles.body),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }

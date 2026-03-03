@@ -35,17 +35,77 @@ class _CPSignUpViewState extends State<CPSignUpView> {
   final TextEditingController _confirmController = TextEditingController();
   final CPErrorMapper _errorMapper = CPErrorMapper();
 
-  String? _formError;
+  String? _domainError;
   bool _passwordVisible = false;
   bool _confirmVisible = false;
+  bool _showValidationErrors = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(_onFieldChanged);
+    _emailController.addListener(_onFieldChanged);
+    _passwordController.addListener(_onFieldChanged);
+    _confirmController.addListener(_onFieldChanged);
+  }
 
   @override
   void dispose() {
+    _nameController.removeListener(_onFieldChanged);
+    _emailController.removeListener(_onFieldChanged);
+    _passwordController.removeListener(_onFieldChanged);
+    _confirmController.removeListener(_onFieldChanged);
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmController.dispose();
     super.dispose();
+  }
+
+  void _onFieldChanged() {
+    setState(() {
+      _showValidationErrors = true;
+      _domainError = null;
+    });
+  }
+
+  List<String> _collectValidationErrors(BuildContext context) {
+    final List<String> errors = <String>[];
+
+    try {
+      CPAuthFormValidators.validateName(_nameController.text);
+    } on CPAppException catch (error) {
+      errors.add(
+        '${context.l10n.fullNameLabel}: ${_errorMapper.mapToMessage(error, context.l10n)}',
+      );
+    }
+
+    try {
+      CPAuthFormValidators.validateEmail(_emailController.text);
+    } on CPAppException catch (error) {
+      errors.add(
+        '${context.l10n.emailLabel}: ${_errorMapper.mapToMessage(error, context.l10n)}',
+      );
+    }
+
+    try {
+      CPAuthFormValidators.validatePassword(_passwordController.text);
+    } on CPAppException catch (error) {
+      errors.add(
+        '${context.l10n.passwordLabel}: ${_errorMapper.mapToMessage(error, context.l10n)}',
+      );
+    }
+
+    try {
+      CPAuthFormValidators.validatePasswordMatch(
+        _passwordController.text,
+        _confirmController.text,
+      );
+    } on CPAppException catch (error) {
+      errors.add(_errorMapper.mapToMessage(error, context.l10n));
+    }
+
+    return errors;
   }
 
   void _onGeneratePasswordTap() {
@@ -55,16 +115,17 @@ class _CPSignUpViewState extends State<CPSignUpView> {
   }
 
   Future<void> _onSignUpTap() async {
-    try {
-      CPAuthFormValidators.validateName(_nameController.text);
-      CPAuthFormValidators.validateEmail(_emailController.text);
-      CPAuthFormValidators.validatePassword(_passwordController.text);
-      CPAuthFormValidators.validatePasswordMatch(
-        _passwordController.text,
-        _confirmController.text,
-      );
-      setState(() => _formError = null);
+    setState(() {
+      _showValidationErrors = true;
+      _domainError = null;
+    });
 
+    final List<String> validationErrors = _collectValidationErrors(context);
+    if (validationErrors.isNotEmpty) {
+      return;
+    }
+
+    try {
       await context.read<CPAuthCubit>().register(
             _nameController.text,
             _emailController.text,
@@ -82,7 +143,7 @@ class _CPSignUpViewState extends State<CPSignUpView> {
       }
     } on CPAppException catch (error) {
       setState(
-          () => _formError = _errorMapper.mapToMessage(error, context.l10n));
+          () => _domainError = _errorMapper.mapToMessage(error, context.l10n));
     }
   }
 
@@ -99,12 +160,17 @@ class _CPSignUpViewState extends State<CPSignUpView> {
         final CPAppException? exception = state.error;
         if (exception != null) {
           setState(() {
-            _formError = _errorMapper.mapToMessage(exception, context.l10n);
+            _domainError = _errorMapper.mapToMessage(exception, context.l10n);
           });
           context.read<CPAuthCubit>().clearError();
         }
       },
       builder: (BuildContext context, CPAuthState state) {
+        final List<String> allErrors = <String>{
+          if (_showValidationErrors) ..._collectValidationErrors(context),
+          if (_domainError != null) _domainError!,
+        }.toList();
+
         return CPAuthScreenContainer(
           showBackButton: true,
           child: Column(
@@ -116,8 +182,8 @@ class _CPSignUpViewState extends State<CPSignUpView> {
                 subtitle: context.l10n.loginSubtitle,
               ),
               SizedBox(height: 24.h),
-              if (_formError != null) CPAuthErrorBanner(message: _formError!),
-              if (_formError != null) SizedBox(height: 14.h),
+              if (allErrors.isNotEmpty) CPAuthErrorBanner(messages: allErrors),
+              if (allErrors.isNotEmpty) SizedBox(height: 14.h),
               CPAppTextField(
                 controller: _nameController,
                 label: context.l10n.fullNameLabel,

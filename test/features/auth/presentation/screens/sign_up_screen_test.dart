@@ -50,7 +50,36 @@ void main() {
       await tester.tap(createAccountButton);
       await tester.pumpAndSettle();
 
-      expect(find.text('Passwords do not match.'), findsOneWidget);
+      expect(find.textContaining('Passwords do not match.'), findsOneWidget);
+      await cubit.close();
+    });
+
+    testWidgets('updates validation errors reactively on input change', (
+      WidgetTester tester,
+    ) async {
+      final CPAuthCubit cubit = CPAuthCubit(CPFakeAuthService());
+
+      await tester.pumpWidget(
+        CPTestApp(
+          home: BlocProvider<CPAuthCubit>.value(
+            value: cubit,
+            child: const CPSignUpScreen(),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).at(1), 'wrong-email');
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Email: Enter a valid email address.'),
+          findsOneWidget);
+
+      await tester.enterText(find.byType(TextField).at(1), 'jane@example.com');
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Email: Enter a valid email address.'),
+          findsNothing);
+
       await cubit.close();
     });
   });

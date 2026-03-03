@@ -93,7 +93,8 @@ class _CPLoginViewState extends State<CPLoginView> {
                 subtitle: context.l10n.loginSubtitle,
               ),
               SizedBox(height: 24.h),
-              if (_formError != null) CPAuthErrorBanner(message: _formError!),
+              if (_formError != null)
+                CPAuthErrorBanner(messages: <String>[_formError!]),
               if (_formError != null) SizedBox(height: 14.h),
               CPAppTextField(
                 controller: _emailController,
