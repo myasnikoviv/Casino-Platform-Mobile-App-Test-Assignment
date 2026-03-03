@@ -11,6 +11,7 @@ import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
 import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
+import 'package:casino_platform_test/src/features/games/services/games_service_impl.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:local_auth/local_auth.dart';
