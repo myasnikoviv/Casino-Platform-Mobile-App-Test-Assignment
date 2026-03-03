@@ -58,7 +58,10 @@ High-level structure:
 
 ## Data and Caching
 - Mock game catalog source: `assets/mock/games.json`.
-- Repository-level in-memory TTL cache for game list.
+- Single `CPGamesGateway` contract with two implementations:
+  - `CPGamesLocalGateway` (used now, JSON-backed mock source).
+  - `CPGamesApiGateway` (prepared for future remote API switch).
+- Service-level persistent TTL cache for game list (`CPHiveTtlCache`).
 - DTO -> ViewModel adaptation in service layer.
 
 ## Quality Gates

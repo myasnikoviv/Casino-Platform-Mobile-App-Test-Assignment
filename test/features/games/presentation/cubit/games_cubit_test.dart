@@ -6,9 +6,7 @@ import 'package:casino_platform_test/src/features/games/adapters/game_view_model
 import 'package:casino_platform_test/src/features/games/cubit/games_cubit.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_state.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
-import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service_impl.dart';
 import 'package:casino_platform_test/src/shared/enums/game_category.dart';
 import 'package:casino_platform_test/src/shared/enums/volatility_level.dart';
@@ -27,10 +25,7 @@ void main() {
       'emits success with mapped games',
       build: () => CPGamesCubit(
         CPGamesServiceImpl(
-          CPGamesGatewayImpl(
-            _SuccessGamesSource(),
-            const _NoopApiGateway(),
-          ),
+          _SuccessGamesGateway(),
           CPMemoryTtlCache<List<CPGameDto>>(),
           const CPGameViewModelAdapter(),
           CPGuardedExecutor(),
@@ -48,10 +43,7 @@ void main() {
       'emits error when service fails',
       build: () => CPGamesCubit(
         CPGamesServiceImpl(
-          CPGamesGatewayImpl(
-            _FailureGamesSource(),
-            const _NoopApiGateway(),
-          ),
+          _FailureGamesGateway(),
           CPMemoryTtlCache<List<CPGameDto>>(),
           const CPGameViewModelAdapter(),
           CPGuardedExecutor(),
@@ -67,9 +59,9 @@ void main() {
   });
 }
 
-class _SuccessGamesSource implements CPGamesLocalGateway {
+class _SuccessGamesGateway implements CPGamesGateway {
   @override
-  Future<List<CPGameDto>> loadGames() async {
+  Future<List<CPGameDto>> getGames() async {
     return const <CPGameDto>[
       CPGameDto(
         id: 'g1',
@@ -86,16 +78,9 @@ class _SuccessGamesSource implements CPGamesLocalGateway {
   }
 }
 
-class _FailureGamesSource implements CPGamesLocalGateway {
+class _FailureGamesGateway implements CPGamesGateway {
   @override
-  Future<List<CPGameDto>> loadGames() async {
+  Future<List<CPGameDto>> getGames() async {
     throw Exception('load failed');
   }
-}
-
-class _NoopApiGateway implements CPGamesApiGateway {
-  const _NoopApiGateway();
-
-  @override
-  Future<List<CPGameDto>> fetchGames() async => const <CPGameDto>[];
 }

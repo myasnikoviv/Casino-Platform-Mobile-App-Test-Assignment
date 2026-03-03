@@ -3,9 +3,7 @@ import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
 import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:casino_platform_test/src/features/games/adapters/game_view_model_adapter.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
-import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service_impl.dart';
 import 'package:casino_platform_test/src/shared/enums/game_category.dart';
@@ -23,23 +21,20 @@ void main() {
 
     test('adapts dto fields into localized view model', () async {
       final CPGamesService service = CPGamesServiceImpl(
-        CPGamesGatewayImpl(
-          _StaticGamesSource(
-            const <CPGameDto>[
-              CPGameDto(
-                id: 'g1',
-                name: 'Sweet Bonanza',
-                category: CPGameCategory.slots,
-                provider: 'Pragmatic Play',
-                rtp: 96.5,
-                volatility: CPVolatilityLevel.high,
-                description: 'Description',
-                thumbnailUrl: 'thumb',
-                headerUrl: 'header',
-              ),
-            ],
-          ),
-          const _NoopApiGateway(),
+        _StaticGamesGateway(
+          const <CPGameDto>[
+            CPGameDto(
+              id: 'g1',
+              name: 'Sweet Bonanza',
+              category: CPGameCategory.slots,
+              provider: 'Pragmatic Play',
+              rtp: 96.5,
+              volatility: CPVolatilityLevel.high,
+              description: 'Description',
+              thumbnailUrl: 'thumb',
+              headerUrl: 'header',
+            ),
+          ],
         ),
         CPMemoryTtlCache<List<CPGameDto>>(),
         const CPGameViewModelAdapter(),
@@ -56,10 +51,7 @@ void main() {
 
     test('returns null when game id is missing', () async {
       final CPGamesService service = CPGamesServiceImpl(
-        CPGamesGatewayImpl(
-          _StaticGamesSource(const <CPGameDto>[]),
-          const _NoopApiGateway(),
-        ),
+        _StaticGamesGateway(const <CPGameDto>[]),
         CPMemoryTtlCache<List<CPGameDto>>(),
         const CPGameViewModelAdapter(),
         CPGuardedExecutor(),
@@ -72,18 +64,11 @@ void main() {
   });
 }
 
-class _StaticGamesSource implements CPGamesLocalGateway {
-  _StaticGamesSource(this._games);
+class _StaticGamesGateway implements CPGamesGateway {
+  _StaticGamesGateway(this._games);
 
   final List<CPGameDto> _games;
 
   @override
-  Future<List<CPGameDto>> loadGames() async => _games;
-}
-
-class _NoopApiGateway implements CPGamesApiGateway {
-  const _NoopApiGateway();
-
-  @override
-  Future<List<CPGameDto>> fetchGames() async => const <CPGameDto>[];
+  Future<List<CPGameDto>> getGames() async => _games;
 }

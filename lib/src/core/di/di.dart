@@ -11,10 +11,8 @@ import 'package:casino_platform_test/src/core/constants/app_constants.dart';
 import 'package:casino_platform_test/src/features/games/adapters/game_view_model_adapter.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway.dart';
-import 'package:casino_platform_test/src/features/games/data/gateways/games_api_gateway_impl.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
 import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway.dart';
-import 'package:casino_platform_test/src/features/games/data/gateways/games_local_gateway_impl.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service_impl.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -64,14 +62,8 @@ class CPDI {
 
     final Box<dynamic> cacheBox =
         await Hive.openBox<dynamic>(CPAppConstants.cacheBoxName);
-    registerDependency<CPGamesLocalGateway>(const CPGamesLocalGatewayImpl());
-    registerDependency<CPGamesApiGateway>(const CPGamesApiGatewayImpl());
-    registerDependency<CPGamesGateway>(
-      CPGamesGatewayImpl(
-        resolveDependency<CPGamesLocalGateway>(),
-        resolveDependency<CPGamesApiGateway>(),
-      ),
-    );
+    registerDependency<CPGamesApiGateway>(const CPGamesApiGateway());
+    registerDependency<CPGamesGateway>(const CPGamesLocalGateway());
     registerDependency<CPTtlCache<List<CPGameDto>>>(
       CPHiveTtlCache<List<CPGameDto>>(
         box: cacheBox,

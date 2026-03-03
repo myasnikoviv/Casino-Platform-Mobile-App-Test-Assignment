@@ -40,12 +40,15 @@
 ## 6) Mock Data and Data Pipeline
 - Games are stored in `assets/mock/games.json`.
 - Data pipeline:
-  1. JSON datasource loads DTOs.
-  2. Repository applies TTL cache policy.
-  3. Service adapts DTOs to UI-ready ViewModels (formatted labels, localized enums).
+  1. `CPGamesGateway` defines a single data access contract.
+  2. `CPGamesLocalGateway` (active) loads DTOs from bundled JSON.
+  3. `CPGamesApiGateway` (prepared, not active) is reserved for future Dio/Retrofit integration.
+  4. Service applies TTL cache policy.
+  5. Service adapts DTOs to UI-ready ViewModels (formatted labels, localized enums).
 
 ## 7) Caching Strategy
-- `TtlCache<T>` implements in-memory cache expiration.
+- `TtlCache<T>` defines cache contract with expiration.
+- `CPHiveTtlCache<T>` is used for persistent TTL caching in this project.
 - Games catalog TTL is currently 5 minutes.
 - Cache invalidates on expiration or explicit clear.
 - This design is extensible for high-volume lists and data refresh policies.
