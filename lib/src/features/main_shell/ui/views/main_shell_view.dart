@@ -19,11 +19,20 @@ class CPMainShellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> tabTree = List<Widget>.generate(
+      tabs.length,
+      (int tabIndex) => HeroMode(
+        enabled: tabIndex == index,
+        child: tabs[tabIndex],
+      ),
+      growable: false,
+    );
+
     return Scaffold(
       body: SafeArea(
         top: true,
         bottom: false,
-        child: IndexedStack(index: index, children: tabs),
+        child: IndexedStack(index: index, children: tabTree),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: index,
