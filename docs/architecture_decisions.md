@@ -76,9 +76,15 @@ Companion full specification:
 - Visibility is restricted to `kDebugMode` to prevent production exposure.
 
 ## 11) Assignment-specific Enhancements Added
-- Password reveal/copy checkpoint after registration.
+- Password save/copy checkpoint after registration with masked display (`******`) and explicit copy CTA.
 - Optional biometric one-tap login enrollment (skippable).
+- Dedicated biometric service flow via `CPBiometricGateway` + `CPAuthService` orchestration, including profile-level enable/disable guarded by biometric identity confirmation.
 - Flip tap animation + Hero continuity for game card to details transition.
+
+### Why these auth UX improvements
+- The assignment uses local-only auth with no backend recovery channel, so forgotten credentials are a realistic risk.
+- Password copy checkpoint reduces lockout probability by nudging users to store credentials immediately.
+- Biometric quick login provides a safe fallback path for repeated access on the same trusted device.
 
 ## 12) Test Strategy (TDD-first)
 - Development follows a test-driven flow for critical logic:

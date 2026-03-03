@@ -34,8 +34,8 @@ Production-oriented implementation of a local-auth casino platform app, aligned 
 - Extra auth UX:
   - Show/hide password.
   - Strong password generator.
-  - Password save/copy checkpoint after sign-up.
-  - Optional biometric one-tap login setup (skippable).
+  - Password save/copy checkpoint after sign-up with masked password preview (asterisks) and explicit copy action.
+  - Optional biometric one-tap login setup (skippable) plus profile-level enable/disable controls protected by biometric confirmation.
 - Main shell:
   - Bottom navigation tabs: Home, Games, Profile.
 - Home/Games:

@@ -79,6 +79,16 @@ This document describes the full technical architecture of the assignment projec
   - `CPAuthLocalGateway` is responsible only for auth user/session data.
   - `CPBiometricGateway` is responsible only for biometric identifier storage.
   - `CPAuthService` composes both gateways to resolve user by biometric mapping.
+- Sign-up contains a password checkpoint step:
+  - password is visually masked in UI (`******`) to avoid shoulder-surfing,
+  - raw value remains available only for explicit clipboard copy action.
+- Profile exposes biometric enable/disable controls, and both actions require biometric confirmation before state changes.
+
+### Rationale for these additions
+- The app is intentionally local-auth only (no server-side password recovery).
+- Because credentials are device-scoped and recoverability is limited, the flow reduces lockout risk by combining:
+  1. immediate password copy/save reminder after registration;
+  2. optional biometric quick-login as low-friction repeat access on enrolled devices.
 
 ## 10) Routing and Guards
 - `go_router` is used for declarative routing.

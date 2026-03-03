@@ -28,6 +28,8 @@ class CPPasswordReviewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String maskedPassword = _maskedPassword(password);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -43,7 +45,7 @@ class CPPasswordReviewView extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(color: Colors.black12),
           ),
-          child: Text(password, style: CPAppTextStyles.h2),
+          child: Text(maskedPassword, style: CPAppTextStyles.h2),
         ),
         SizedBox(height: 12.h),
         CPAppButton(
@@ -58,5 +60,12 @@ class CPPasswordReviewView extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String _maskedPassword(String rawPassword) {
+    if (rawPassword.isEmpty) {
+      return '';
+    }
+    return List<String>.filled(rawPassword.length, '*').join();
   }
 }
