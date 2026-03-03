@@ -28,7 +28,10 @@ class CPHomeTabView extends StatelessWidget {
             cacheExtent: 600,
             padding: EdgeInsets.zero,
             children: <Widget>[
-              const CPPromoCarousel(),
+              Padding(
+                padding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 0),
+                child: const CPPromoCarousel(),
+              ),
               Padding(
                 padding: EdgeInsets.all(12.w),
                 child: Column(

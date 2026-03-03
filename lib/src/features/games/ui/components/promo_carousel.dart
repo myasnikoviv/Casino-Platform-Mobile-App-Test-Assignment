@@ -84,10 +84,11 @@ class _CPPromoCarouselState extends State<CPPromoCarousel> {
             },
           ),
           Positioned(
+            bottom: 10.h,
             left: 0,
             right: 0,
-            bottom: 10.h,
-            child: Center(
+            child: Align(
+              alignment: Alignment.bottomCenter,
               child: IgnorePointer(
                 child: Container(
                   padding:
@@ -182,6 +183,7 @@ class _CPPromoPageIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: List<Widget>.generate(
         count,
