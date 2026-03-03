@@ -63,33 +63,46 @@ class _CPPromoCarouselState extends State<CPPromoCarousel> {
     ];
 
     return SizedBox(
-      height: 214.h,
-      child: Column(
+      height: 190.h,
+      child: Stack(
         children: <Widget>[
-          SizedBox(
-            height: 190.h,
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: banners.length,
-              onPageChanged: (int index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              itemBuilder: (BuildContext context, int index) {
-                final _CPPromoContent banner = banners[index];
-                return CPPromoBanner(
-                  imageUrl: banner.imageUrl,
-                  title: banner.title,
-                  ctaLabel: banner.ctaLabel,
-                );
-              },
-            ),
+          PageView.builder(
+            controller: _pageController,
+            itemCount: banners.length,
+            onPageChanged: (int index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            itemBuilder: (BuildContext context, int index) {
+              final _CPPromoContent banner = banners[index];
+              return CPPromoBanner(
+                imageUrl: banner.imageUrl,
+                title: banner.title,
+                ctaLabel: banner.ctaLabel,
+              );
+            },
           ),
-          SizedBox(height: 8.h),
-          _CPPromoPageIndicator(
-            count: banners.length,
-            currentIndex: _currentIndex,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 10.h,
+            child: Center(
+              child: IgnorePointer(
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.32),
+                    borderRadius: BorderRadius.circular(999.r),
+                  ),
+                  child: _CPPromoPageIndicator(
+                    count: banners.length,
+                    currentIndex: _currentIndex,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
