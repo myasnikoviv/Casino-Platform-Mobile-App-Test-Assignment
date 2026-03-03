@@ -3,31 +3,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Icon token set used across the app.
 enum CPIconType {
-  home,
-  homeOutlined,
-  games,
-  gamesOutlined,
-  profile,
-  profileOutlined,
-  fingerprint,
-  copy,
-  warning,
-}
+  home(Icons.home),
+  homeOutlined(Icons.home_outlined),
+  games(Icons.casino),
+  gamesOutlined(Icons.casino_outlined),
+  profile(Icons.person),
+  profileOutlined(Icons.person_outline),
+  fingerprint(Icons.fingerprint),
+  copy(Icons.copy),
+  warning(Icons.warning_amber_rounded);
 
-extension CPIconTypeX on CPIconType {
-  IconData get data {
-    return switch (this) {
-      CPIconType.home => Icons.home,
-      CPIconType.homeOutlined => Icons.home_outlined,
-      CPIconType.games => Icons.casino,
-      CPIconType.gamesOutlined => Icons.casino_outlined,
-      CPIconType.profile => Icons.person,
-      CPIconType.profileOutlined => Icons.person_outline,
-      CPIconType.fingerprint => Icons.fingerprint,
-      CPIconType.copy => Icons.copy,
-      CPIconType.warning => Icons.warning_amber_rounded,
-    };
-  }
+  const CPIconType(this.data);
+
+  final IconData data;
 }
 
 /// App icon widget that resolves icon data from [CPIconType].
