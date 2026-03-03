@@ -12,13 +12,13 @@ class CPHomeGamesSkeleton extends StatelessWidget {
     return CPAppShimmer(
       child: Column(
         children: <Widget>[
-          _CPBlock(height: 160, borderRadius: 16),
+          const _CPBlock(height: 160, borderRadius: 16),
           SizedBox(height: 14.h),
           Row(
             children: <Widget>[
-              Expanded(child: _CPBlock(height: 170, borderRadius: 14)),
+              const Expanded(child: _CPBlock(height: 170, borderRadius: 14)),
               SizedBox(width: 10.w),
-              Expanded(child: _CPBlock(height: 170, borderRadius: 14)),
+              const Expanded(child: _CPBlock(height: 170, borderRadius: 14)),
             ],
           ),
         ],

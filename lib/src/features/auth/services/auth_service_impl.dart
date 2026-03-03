@@ -6,7 +6,6 @@ import 'package:casino_platform_test/src/features/auth/data/dto/local_user_dto.d
 import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway.dart';
 import 'package:casino_platform_test/src/features/auth/entities/user_session.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
-import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
 
 /// Default local auth service implementation.
@@ -153,7 +152,25 @@ class CPAuthServiceImpl implements CPAuthService {
       id: dto.id,
       fullName: dto.fullName,
       email: dto.email,
-      memberSince: DateFormat('MMM d, yyyy').format(memberSince),
+      memberSince: _formatMemberSince(memberSince),
     );
+  }
+
+  String _formatMemberSince(DateTime date) {
+    const List<String> months = <String>[
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 }

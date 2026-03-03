@@ -18,7 +18,7 @@ class CPAuthCubit extends Cubit<CPAuthState> {
       return;
     }
     _initialized = true;
-    emit(CPAuthUnknownState(isBusy: true));
+    emit(const CPAuthUnknownState(isBusy: true));
     try {
       final bool bioAvailable = await _authService.canUseBiometrics();
       final CPUserSession? session = await _authService.restoreSession();
