@@ -19,7 +19,12 @@ I completed a production-oriented Flutter application based on the provided requ
   - profile-level biometric enable/disable controls,
   - dedicated dev-only Widgetbook route to review shared styles/components in one place.
 
-I am also attaching a short video walkthrough of the app in action.
+I am also attaching a short video walkthrough of the app in action:
+- `docs/simulator_screen_recording.m4v`
+
+Note on the video quality:
+- there are minor flickering/compression artifacts visible in the recording file,
+- those artifacts are not present in the actual running UI and appeared only after video compression/encoding.
 
 ## Clarification note
 There was one requirement area that I intentionally did not block on with follow-up questions to keep delivery speed high:
