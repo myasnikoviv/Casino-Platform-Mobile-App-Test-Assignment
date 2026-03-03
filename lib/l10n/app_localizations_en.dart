@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Casino Platform';
 
   @override
-  String get loginTitle => 'Welcome back';
+  String get loginTitle => 'Welcome';
 
   @override
   String get loginSubtitle => 'Sign in to continue';
@@ -72,6 +72,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enableBiometric => 'Enable biometrics';
+
+  @override
+  String get disableBiometric => 'Disable biometrics';
+
+  @override
+  String get loginWithBiometrics => 'Login with biometrics';
 
   @override
   String get skipForNow => 'Skip for now';
@@ -158,6 +164,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authRequired => 'Please login to continue.';
 
   @override
+  String get biometricsUnavailable =>
+      'Biometrics are not available or not enrolled on this device.';
+
+  @override
+  String get biometricsUnavailableStatus => 'Unavailable';
+
+  @override
+  String get biometricsNotEnabled =>
+      'Biometric login is not enabled for this account.';
+
+  @override
+  String get biometricAuthFailed =>
+      'Biometric authentication was not completed.';
+
+  @override
   String get categorySlots => 'Slots';
 
   @override
@@ -191,7 +212,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language => 'Language';
 
   @override
+  String get biometricsStatusLabel => 'Biometrics';
+
+  @override
   String get enabled => 'Enabled';
+
+  @override
+  String get disabled => 'Disabled';
 
   @override
   String get english => 'English';

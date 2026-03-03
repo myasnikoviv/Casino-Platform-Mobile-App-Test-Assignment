@@ -9,11 +9,14 @@ class CPFakeAuthService implements CPAuthService {
     this.restoreResult,
     this.biometricLoginResult,
     this.canUseBiometricsResult = false,
+    this.hasBiometricLoginConfiguredResult = false,
+    this.isBiometricEnabledForCurrentSessionResult = false,
     this.registerError,
     this.loginError,
     this.restoreError,
     this.biometricLoginError,
     this.enableBiometricError,
+    this.disableBiometricError,
   });
 
   CPUserSession? registerResult;
@@ -21,12 +24,15 @@ class CPFakeAuthService implements CPAuthService {
   CPUserSession? restoreResult;
   CPUserSession? biometricLoginResult;
   bool canUseBiometricsResult;
+  bool hasBiometricLoginConfiguredResult;
+  bool isBiometricEnabledForCurrentSessionResult;
 
   Exception? registerError;
   Exception? loginError;
   Exception? restoreError;
   Exception? biometricLoginError;
   Exception? enableBiometricError;
+  Exception? disableBiometricError;
 
   int loginCalls = 0;
   int registerCalls = 0;
@@ -40,6 +46,27 @@ class CPFakeAuthService implements CPAuthService {
     if (enableBiometricError != null) {
       throw enableBiometricError!;
     }
+    hasBiometricLoginConfiguredResult = true;
+    isBiometricEnabledForCurrentSessionResult = true;
+  }
+
+  @override
+  Future<void> disableBiometricForCurrentSession() async {
+    if (disableBiometricError != null) {
+      throw disableBiometricError!;
+    }
+    hasBiometricLoginConfiguredResult = false;
+    isBiometricEnabledForCurrentSessionResult = false;
+  }
+
+  @override
+  Future<bool> hasBiometricLoginConfigured() async {
+    return hasBiometricLoginConfiguredResult;
+  }
+
+  @override
+  Future<bool> isBiometricEnabledForCurrentSession() async {
+    return isBiometricEnabledForCurrentSessionResult;
   }
 
   @override

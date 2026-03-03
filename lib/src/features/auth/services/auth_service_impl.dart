@@ -94,19 +94,67 @@ class CPAuthServiceImpl implements CPAuthService {
   @override
   Future<bool> canUseBiometrics() async {
     return _executor.run(() async {
-      return await _localAuth.canCheckBiometrics &&
-          await _localAuth.isDeviceSupported();
+      final bool canCheck = await _localAuth.canCheckBiometrics;
+      final bool isSupported = await _localAuth.isDeviceSupported();
+      if (!canCheck || !isSupported) {
+        return false;
+      }
+      final List<BiometricType> enrolled =
+          await _localAuth.getAvailableBiometrics();
+      return enrolled.isNotEmpty;
     });
   }
 
   @override
   Future<void> enableBiometricForCurrentSession() async {
     await _executor.run(() async {
+      final bool supported = await canUseBiometrics();
+      if (!supported) {
+        throw const CPAuthException(
+            code: CPAuthErrorCode.biometricsUnavailable);
+      }
+
       final String? email = await _gateway.getSessionEmail();
       if (email == null || email.isEmpty) {
         throw const CPAuthException(code: CPAuthErrorCode.authRequired);
       }
+
       await _gateway.saveBiometricEmail(email);
+    });
+  }
+
+  @override
+  Future<void> disableBiometricForCurrentSession() async {
+    await _executor.run(() async {
+      final String? email = await _gateway.getSessionEmail();
+      if (email == null || email.isEmpty) {
+        throw const CPAuthException(code: CPAuthErrorCode.authRequired);
+      }
+
+      final String? biometricEmail = await _gateway.getBiometricEmail();
+      if (biometricEmail == email) {
+        await _gateway.clearBiometricEmail();
+      }
+    });
+  }
+
+  @override
+  Future<bool> hasBiometricLoginConfigured() async {
+    return _executor.run(() async {
+      final String? email = await _gateway.getBiometricEmail();
+      return email != null && email.isNotEmpty;
+    });
+  }
+
+  @override
+  Future<bool> isBiometricEnabledForCurrentSession() async {
+    return _executor.run(() async {
+      final String? sessionEmail = await _gateway.getSessionEmail();
+      if (sessionEmail == null || sessionEmail.isEmpty) {
+        return false;
+      }
+      final String? biometricEmail = await _gateway.getBiometricEmail();
+      return biometricEmail == sessionEmail;
     });
   }
 
@@ -115,12 +163,13 @@ class CPAuthServiceImpl implements CPAuthService {
     return _executor.run(() async {
       final bool supported = await canUseBiometrics();
       if (!supported) {
-        return null;
+        throw const CPAuthException(
+            code: CPAuthErrorCode.biometricsUnavailable);
       }
 
       final String? biometricEmail = await _gateway.getBiometricEmail();
       if (biometricEmail == null || biometricEmail.isEmpty) {
-        return null;
+        throw const CPAuthException(code: CPAuthErrorCode.biometricsNotEnabled);
       }
 
       final bool authenticated = await _localAuth.authenticate(
@@ -131,13 +180,13 @@ class CPAuthServiceImpl implements CPAuthService {
         ),
       );
       if (!authenticated) {
-        return null;
+        throw const CPAuthException(code: CPAuthErrorCode.biometricAuthFailed);
       }
 
       final CPLocalUserDto? user =
           await _gateway.getUserByEmail(biometricEmail);
       if (user == null) {
-        return null;
+        throw const CPAuthException(code: CPAuthErrorCode.invalidCredentials);
       }
 
       await _gateway.saveSession(user.email);

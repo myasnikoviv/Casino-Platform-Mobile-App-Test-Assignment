@@ -28,7 +28,15 @@ class CPProfileInfoTile extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(child: Text(label, style: CPAppTextStyles.label)),
-          Text(value, style: CPAppTextStyles.body),
+          Flexible(
+            child: Text(
+              value,
+              style: CPAppTextStyles.body,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
         ],
       ),
     );

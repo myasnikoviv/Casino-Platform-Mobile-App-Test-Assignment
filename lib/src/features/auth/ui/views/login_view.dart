@@ -120,10 +120,11 @@ class _CPLoginViewState extends State<CPLoginView> {
                 onPressed: _onLoginTap,
                 isLoading: state.isBusy,
               ),
-              if (state.biometricsAvailable) SizedBox(height: 10.h),
-              if (state.biometricsAvailable)
+              if (state.biometricsAvailable && state.biometricsEnabled)
+                SizedBox(height: 10.h),
+              if (state.biometricsAvailable && state.biometricsEnabled)
                 CPAppButton(
-                  label: context.l10n.enableBiometric,
+                  label: context.l10n.loginWithBiometrics,
                   onPressed: _onBiometricTap,
                   icon: CPIconType.fingerprint,
                 ),

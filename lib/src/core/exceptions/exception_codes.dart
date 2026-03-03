@@ -11,4 +11,7 @@ enum CPAuthErrorCode {
   invalidCredentials,
   emailExists,
   authRequired,
+  biometricsUnavailable,
+  biometricsNotEnabled,
+  biometricAuthFailed,
 }

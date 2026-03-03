@@ -29,6 +29,9 @@ class CPErrorMapper {
       CPAuthErrorCode.invalidCredentials => l10n.invalidCredentials,
       CPAuthErrorCode.emailExists => l10n.emailExists,
       CPAuthErrorCode.authRequired => l10n.authRequired,
+      CPAuthErrorCode.biometricsUnavailable => l10n.biometricsUnavailable,
+      CPAuthErrorCode.biometricsNotEnabled => l10n.biometricsNotEnabled,
+      CPAuthErrorCode.biometricAuthFailed => l10n.biometricAuthFailed,
     };
   }
 }

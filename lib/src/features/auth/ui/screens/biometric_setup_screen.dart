@@ -1,5 +1,6 @@
 import 'package:casino_platform_test/src/core/router/extensions/context.dart';
 import 'package:casino_platform_test/src/core/router/route_paths.dart';
+import 'package:casino_platform_test/src/core/exceptions/error_mapper.dart';
 import 'package:casino_platform_test/src/features/auth/ui/view_models/biometric_setup_view_model.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
@@ -25,8 +26,21 @@ class CPBiometricSetupScreen extends StatelessWidget {
   const CPBiometricSetupScreen({super.key});
 
   Future<void> _onEnableTap(BuildContext context) async {
-    await context.read<CPAuthCubit>().enableBiometric();
+    final bool success = await context.read<CPAuthCubit>().enableBiometric();
     if (!context.mounted) {
+      return;
+    }
+    if (!success) {
+      final CPAuthState state = context.read<CPAuthCubit>().state;
+      final exception = state.error;
+      if (exception != null) {
+        final String message =
+            CPErrorMapper().mapToMessage(exception, context.l10n);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+        context.read<CPAuthCubit>().clearError();
+      }
       return;
     }
     context.goSubRoute(CPMainShellScreen.routePath);

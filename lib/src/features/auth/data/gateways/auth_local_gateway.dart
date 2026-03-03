@@ -22,4 +22,7 @@ abstract interface class CPAuthLocalGateway {
 
   /// Returns biometric-enabled email.
   Future<String?> getBiometricEmail();
+
+  /// Clears biometric one-tap login preference.
+  Future<void> clearBiometricEmail();
 }

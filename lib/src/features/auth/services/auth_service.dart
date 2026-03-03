@@ -27,6 +27,15 @@ abstract interface class CPAuthService {
   /// Enables biometric quick login for current session.
   Future<void> enableBiometricForCurrentSession();
 
+  /// Disables biometric quick login for current session.
+  Future<void> disableBiometricForCurrentSession();
+
+  /// Returns true when any biometric login is configured on device.
+  Future<bool> hasBiometricLoginConfigured();
+
+  /// Returns true when current authenticated session has biometrics enabled.
+  Future<bool> isBiometricEnabledForCurrentSession();
+
   /// Tries biometric login and returns session when successful.
   Future<CPUserSession?> loginWithBiometrics();
 }

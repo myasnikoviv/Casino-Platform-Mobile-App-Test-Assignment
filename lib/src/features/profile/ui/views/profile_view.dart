@@ -13,12 +13,22 @@ class CPProfileView extends StatelessWidget {
   /// Creates [CPProfileView].
   const CPProfileView({
     required this.session,
+    required this.biometricsAvailable,
+    required this.biometricsEnabled,
+    required this.isBusy,
+    required this.onEnableBiometricTap,
+    required this.onDisableBiometricTap,
     required this.onLogoutTap,
     required this.onOpenWidgetbookTap,
     super.key,
   });
 
   final CPUserSession session;
+  final bool biometricsAvailable;
+  final bool biometricsEnabled;
+  final bool isBusy;
+  final VoidCallback? onEnableBiometricTap;
+  final VoidCallback? onDisableBiometricTap;
   final VoidCallback onLogoutTap;
   final VoidCallback onOpenWidgetbookTap;
 
@@ -49,6 +59,27 @@ class CPProfileView extends StatelessWidget {
         CPProfileInfoTile(
           label: context.l10n.language,
           value: context.l10n.english,
+        ),
+        SizedBox(height: 8.h),
+        CPProfileInfoTile(
+          label: context.l10n.biometricsStatusLabel,
+          value: !biometricsAvailable
+              ? context.l10n.biometricsUnavailableStatus
+              : biometricsEnabled
+                  ? context.l10n.enabled
+                  : context.l10n.disabled,
+        ),
+        SizedBox(height: 8.h),
+        CPAppButton(
+          label: biometricsEnabled
+              ? context.l10n.disableBiometric
+              : context.l10n.enableBiometric,
+          onPressed: !biometricsAvailable
+              ? null
+              : (biometricsEnabled
+                  ? onDisableBiometricTap
+                  : onEnableBiometricTap),
+          isLoading: isBusy,
         ),
         if (kDebugMode) SizedBox(height: 12.h),
         if (kDebugMode)

@@ -73,4 +73,10 @@ class CPAuthLocalGatewayImpl implements CPAuthLocalGateway {
   Future<String?> getBiometricEmail() {
     return _secureStorageService.read(CPAppConstants.biometricEmailKey);
   }
+
+  /// Clears biometric one-tap login preference.
+  @override
+  Future<void> clearBiometricEmail() {
+    return _secureStorageService.delete(CPAppConstants.biometricEmailKey);
+  }
 }

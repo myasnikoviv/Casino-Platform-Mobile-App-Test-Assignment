@@ -106,6 +106,7 @@ class _CPSignUpViewState extends State<CPSignUpView> {
       },
       builder: (BuildContext context, CPAuthState state) {
         return CPAuthScreenContainer(
+          showBackButton: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

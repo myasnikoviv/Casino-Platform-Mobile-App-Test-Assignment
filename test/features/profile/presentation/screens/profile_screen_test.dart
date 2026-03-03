@@ -1,5 +1,6 @@
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/profile/ui/screens/profile_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -29,6 +30,12 @@ void main() {
 
       expect(find.text('Alex Palmer'), findsOneWidget);
       expect(find.text('alex@example.com'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Open Widgetbook'),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
       expect(find.text('Open Widgetbook'), findsOneWidget);
       await cubit.close();
     });

@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// No description provided for @loginTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome back'**
+  /// **'Welcome'**
   String get loginTitle;
 
   /// No description provided for @loginSubtitle.
@@ -219,6 +219,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enable biometrics'**
   String get enableBiometric;
+
+  /// No description provided for @disableBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable biometrics'**
+  String get disableBiometric;
+
+  /// No description provided for @loginWithBiometrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Login with biometrics'**
+  String get loginWithBiometrics;
 
   /// No description provided for @skipForNow.
   ///
@@ -388,6 +400,30 @@ abstract class AppLocalizations {
   /// **'Please login to continue.'**
   String get authRequired;
 
+  /// No description provided for @biometricsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometrics are not available or not enrolled on this device.'**
+  String get biometricsUnavailable;
+
+  /// No description provided for @biometricsUnavailableStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get biometricsUnavailableStatus;
+
+  /// No description provided for @biometricsNotEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric login is not enabled for this account.'**
+  String get biometricsNotEnabled;
+
+  /// No description provided for @biometricAuthFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric authentication was not completed.'**
+  String get biometricAuthFailed;
+
   /// No description provided for @categorySlots.
   ///
   /// In en, this message translates to:
@@ -454,11 +490,23 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get language;
 
+  /// No description provided for @biometricsStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometrics'**
+  String get biometricsStatusLabel;
+
   /// No description provided for @enabled.
   ///
   /// In en, this message translates to:
   /// **'Enabled'**
   String get enabled;
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
 
   /// No description provided for @english.
   ///

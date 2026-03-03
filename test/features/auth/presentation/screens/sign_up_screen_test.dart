@@ -42,7 +42,12 @@ void main() {
         'Another123!',
       );
 
-      await tester.tap(find.byType(ElevatedButton).first);
+      final Finder createAccountButton = find.widgetWithText(
+        ElevatedButton,
+        'Create account',
+      );
+      await tester.ensureVisible(createAccountButton);
+      await tester.tap(createAccountButton);
       await tester.pumpAndSettle();
 
       expect(find.text('Passwords do not match.'), findsOneWidget);

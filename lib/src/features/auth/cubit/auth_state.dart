@@ -8,6 +8,7 @@ sealed class CPAuthState extends Equatable {
   const CPAuthState({
     required this.isBusy,
     required this.biometricsAvailable,
+    required this.biometricsEnabled,
     this.error,
   });
 
@@ -17,11 +18,15 @@ sealed class CPAuthState extends Equatable {
   /// Biometric capability flag.
   final bool biometricsAvailable;
 
+  /// Biometric login configuration flag.
+  final bool biometricsEnabled;
+
   /// Last domain error.
   final CPAppException? error;
 
   @override
-  List<Object?> get props => <Object?>[isBusy, biometricsAvailable, error];
+  List<Object?> get props =>
+      <Object?>[isBusy, biometricsAvailable, biometricsEnabled, error];
 }
 
 /// Unknown state while bootstrap is in progress.
@@ -30,6 +35,7 @@ class CPAuthUnknownState extends CPAuthState {
   const CPAuthUnknownState({
     super.isBusy = false,
     super.biometricsAvailable = false,
+    super.biometricsEnabled = false,
     super.error,
   });
 }
@@ -40,6 +46,7 @@ class CPUnauthenticatedState extends CPAuthState {
   const CPUnauthenticatedState({
     super.isBusy = false,
     super.biometricsAvailable = false,
+    super.biometricsEnabled = false,
     super.error,
   });
 }
@@ -51,6 +58,7 @@ class CPAuthenticatedState extends CPAuthState {
     required this.session,
     super.isBusy = false,
     super.biometricsAvailable = false,
+    super.biometricsEnabled = false,
     super.error,
   });
 
@@ -62,6 +70,7 @@ class CPAuthenticatedState extends CPAuthState {
         session,
         isBusy,
         biometricsAvailable,
+        biometricsEnabled,
         error,
       ];
 }
