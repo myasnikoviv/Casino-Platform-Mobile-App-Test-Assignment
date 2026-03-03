@@ -1,5 +1,6 @@
 import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
+import 'package:casino_platform_test/src/core/exceptions/error_reporting_service.dart';
 import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:casino_platform_test/src/features/games/adapters/game_view_model_adapter.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
@@ -38,7 +39,7 @@ void main() {
         ),
         CPMemoryTtlCache<List<CPGameDto>>(),
         const CPGameViewModelAdapter(),
-        CPGuardedExecutor(),
+        const CPGuardedExecutor(CPNoopErrorReportingService()),
       );
 
       final games = await service.getGames(l10n);
@@ -54,7 +55,7 @@ void main() {
         _StaticGamesGateway(const <CPGameDto>[]),
         CPMemoryTtlCache<List<CPGameDto>>(),
         const CPGameViewModelAdapter(),
-        CPGuardedExecutor(),
+        const CPGuardedExecutor(CPNoopErrorReportingService()),
       );
 
       final result = await service.getGameById('missing', l10n);
@@ -82,7 +83,7 @@ void main() {
         ),
         cache,
         const CPGameViewModelAdapter(),
-        CPGuardedExecutor(),
+        const CPGuardedExecutor(CPNoopErrorReportingService()),
       );
 
       final games = await service.getGames(l10n);

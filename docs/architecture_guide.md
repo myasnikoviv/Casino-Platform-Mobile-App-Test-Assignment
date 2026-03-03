@@ -24,7 +24,7 @@ This document describes the full technical architecture of the assignment projec
 - Key registrations:
   - Auth stack (`CPAuthLocalGateway`, `CPAuthService`, `CPAuthCubit`).
   - Games stack (`CPGamesGateway` -> `CPGamesLocalGateway` active binding).
-  - Shared infra (`CPGuardedExecutor`, `CPTtlCache`, secure storage, encrypted Hive box factory).
+  - Shared infra (`CPGuardedExecutor`, `CPErrorReportingService`, `CPTtlCache`, secure storage, encrypted Hive box factory).
 
 ## 4) UI and State Flow
 - `Screen` widgets are shells responsible for wiring/navigation and state switching.
@@ -65,6 +65,9 @@ This document describes the full technical architecture of the assignment projec
 - `CPGuardedExecutor` is used to centralize try/catch boundaries.
 - Typed app exceptions are mapped to localized messages by `CPErrorMapper`.
 - UI receives friendly messages and retry actions instead of raw exceptions.
+- `CPErrorReportingService` is the integration point for third-party telemetry.
+- Current implementation is `CPNoopErrorReportingService` (placeholder with empty body, no outbound side effects).
+- `CPGuardedExecutor` reports both typed (`CPAppException`) and unknown exceptions before propagating them, so incidents are tracked even when UI message mapping falls back to generic text.
 
 ## 9) Auth and Local Security
 - Auth user records are saved in encrypted Hive box.

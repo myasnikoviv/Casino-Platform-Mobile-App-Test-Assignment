@@ -19,6 +19,11 @@ Production-oriented implementation of a local-auth casino platform app, aligned 
 - `intl`: date formatting.
 - `flutter_localizations`: localization delegates.
 
+## Observability
+- `CPErrorReportingService` is introduced as a dedicated abstraction for external crash/analytics reporting (for example Sentry/Crashlytics).
+- Current runtime binding uses `CPNoopErrorReportingService` (safe placeholder, no outbound calls in assignment scope).
+- `CPGuardedExecutor` reports every caught exception (typed and unexpected) before rethrowing/mapping, so telemetry is captured even when UI falls back to a generic message.
+
 ## Implemented Features
 - Local auth flow:
   - Login (email + password validation).

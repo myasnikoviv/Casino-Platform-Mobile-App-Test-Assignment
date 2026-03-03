@@ -1,4 +1,5 @@
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
+import 'package:casino_platform_test/src/core/exceptions/error_reporting_service.dart';
 import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:casino_platform_test/src/core/storage/hive_secure_box_factory.dart';
 import 'package:casino_platform_test/src/core/storage/secure_storage_service.dart';
@@ -53,7 +54,12 @@ class CPDI {
     registerDependency<CPBiometricGateway>(
       CPBiometricGatewayImpl(resolveDependency<CPSecureStorageService>()),
     );
-    registerDependency<CPGuardedExecutor>(CPGuardedExecutor());
+    registerDependency<CPErrorReportingService>(
+      const CPNoopErrorReportingService(),
+    );
+    registerDependency<CPGuardedExecutor>(
+      CPGuardedExecutor(resolveDependency<CPErrorReportingService>()),
+    );
     registerDependency<CPAuthService>(
       CPAuthServiceImpl(
         resolveDependency<CPAuthLocalGateway>(),

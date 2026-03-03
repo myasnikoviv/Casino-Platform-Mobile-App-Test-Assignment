@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
+import 'package:casino_platform_test/src/core/exceptions/error_reporting_service.dart';
 import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:casino_platform_test/src/features/games/adapters/game_view_model_adapter.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_cubit.dart';
@@ -28,7 +29,7 @@ void main() {
           _SuccessGamesGateway(),
           CPMemoryTtlCache<List<CPGameDto>>(),
           const CPGameViewModelAdapter(),
-          CPGuardedExecutor(),
+          const CPGuardedExecutor(CPNoopErrorReportingService()),
         ),
       ),
       act: (CPGamesCubit cubit) => cubit.loadGames(l10n),
@@ -46,7 +47,7 @@ void main() {
           _FailureGamesGateway(),
           CPMemoryTtlCache<List<CPGameDto>>(),
           const CPGameViewModelAdapter(),
-          CPGuardedExecutor(),
+          const CPGuardedExecutor(CPNoopErrorReportingService()),
         ),
       ),
       act: (CPGamesCubit cubit) => cubit.loadGames(l10n),

@@ -40,6 +40,9 @@ Companion full specification:
 - Domain/infrastructure exceptions are represented by sealed `AppException` types.
 - `ErrorMapper` converts typed exceptions into localized, user-friendly messages.
 - UI error blocks always provide a retry path for recoverable states.
+- `CPErrorReportingService` defines telemetry integration boundary for third-party monitoring providers (Sentry/Crashlytics style).
+- Current app wiring uses `CPNoopErrorReportingService`; production provider can be attached by DI-only swap.
+- Every exception caught by `GuardedExecutor` is reported through `CPErrorReportingService`, including cases that end up as generic fallback UI messages.
 
 ## 6) Mock Data and Data Pipeline
 - Games are stored in `assets/mock/games.json`.
