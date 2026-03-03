@@ -1,5 +1,8 @@
 # Architecture Decisions
 
+Companion full specification:
+- [architecture_guide.md](architecture_guide.md)
+
 ## 1) Architecture Style
 - **Feature-first layered architecture** is used.
 - `core/` contains global infrastructure: routing, theme, localization, secure storage, errors, DI, cache.

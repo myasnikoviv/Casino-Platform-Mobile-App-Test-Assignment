@@ -4,7 +4,8 @@ Production-oriented implementation of a local-auth casino platform app, aligned 
 
 ## Run
 1. `flutter pub get`
-2. `flutter run`
+2. `flutter gen-l10n`
+3. `flutter run`
 
 ## Tech Stack
 - `flutter_bloc`: reactive state management via Cubit.
@@ -48,7 +49,8 @@ Production-oriented implementation of a local-auth casino platform app, aligned 
   - Shared widgets preview and theme token preview.
 
 ## Architecture
-See detailed decisions in:
+See architecture documentation:
+- [docs/architecture_guide.md](docs/architecture_guide.md) (full architecture and responsibility map)
 - [docs/architecture_decisions.md](docs/architecture_decisions.md)
 
 High-level structure:
@@ -79,7 +81,7 @@ High-level structure:
   - Widget/integration-like tests:
     - login and sign-up validation flows,
     - profile rendering with authenticated state.
-- Current suite: **31 passing tests**.
+- Current suite: **34 passing tests**.
 - Goal: reduce manual QA load by catching regressions at logic/state/UI-validation levels before runtime testing.
 
 ## Notes
