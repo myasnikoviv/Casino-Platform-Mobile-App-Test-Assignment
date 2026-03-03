@@ -97,14 +97,8 @@ class _CPWidgetbookViewState extends State<CPWidgetbookView> {
         SizedBox(height: 14.h),
         Text(context.l10n.promoTitle1, style: CPAppTextStyles.h2),
         SizedBox(height: 8.h),
-        SizedBox(
-          height: 190.h,
-          child: CPPromoBanner(
-            imageUrl: 'https://picsum.photos/seed/widgetbook-promo/1200/600',
-            title: context.l10n.promoTitle1,
-            ctaLabel: context.l10n.promoCta,
-          ),
-        ),
+        const CPPromoCarousel(),
+        SizedBox(height: 28.h),
       ],
     );
   }
