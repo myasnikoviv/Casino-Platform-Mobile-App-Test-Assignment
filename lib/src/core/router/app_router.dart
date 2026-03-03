@@ -77,8 +77,8 @@ class CPRouter {
               },
             ),
             GoRoute(
-              path: CPWidgetBookScreen.pathChunk,
-              builder: (_, __) => const CPWidgetBookScreen(),
+              path: CPWidgetbookScreen.pathChunk,
+              builder: (_, __) => const CPWidgetbookScreen(),
             ),
           ],
         ),
