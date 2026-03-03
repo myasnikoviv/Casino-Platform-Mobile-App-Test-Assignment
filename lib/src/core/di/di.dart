@@ -10,12 +10,11 @@ import 'package:casino_platform_test/src/features/games/data/sources/games_json_
 import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get_it/get_it.dart';
 import 'package:local_auth/local_auth.dart';
 
 /// Dependency container with explicit register/resolve APIs.
 class CPDI {
-  static final GetIt _instance = GetIt.instance;
+  static final Map<Type, Object> _dependencies = <Type, Object>{};
   static bool _initialized = false;
 
   /// Initializes all runtime dependencies.
@@ -59,18 +58,22 @@ class CPDI {
 
   /// Registers singleton dependency instance.
   static void registerDependency<T extends Object>(T dependency) {
-    if (_instance.isRegistered<T>()) {
-      _instance.unregister<T>();
-    }
-    _instance.registerSingleton<T>(dependency);
+    _dependencies[T] = dependency;
   }
 
   /// Resolves dependency by type.
-  static T resolveDependency<T extends Object>() => _instance.get<T>();
+  static T resolveDependency<T extends Object>() {
+    final Object? dependency = _dependencies[T];
+    if (dependency == null) {
+      throw StateError('Dependency $T is not registered in CPDI.');
+    }
+    return dependency as T;
+  }
 
   /// Resolves async dependency by type.
-  static Future<T> resolveAsyncDependency<T extends Object>() =>
-      _instance.getAsync<T>();
+  static Future<T> resolveAsyncDependency<T extends Object>() async {
+    return resolveDependency<T>();
+  }
 
   /// Instance-based resolver for convenience in widgets.
   T resolve<T extends Object>() => resolveDependency<T>();
