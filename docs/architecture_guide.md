@@ -72,6 +72,10 @@ This document describes the full technical architecture of the assignment projec
 - Session key is stored securely (`flutter_secure_storage`).
 - Passwords are stored as hashes only.
 - Biometric quick-login setup is optional and uses `local_auth`.
+- Biometric mapping persistence is isolated into a dedicated `CPBiometricGateway`.
+  - `CPAuthLocalGateway` is responsible only for auth user/session data.
+  - `CPBiometricGateway` is responsible only for biometric identifier storage.
+  - `CPAuthService` composes both gateways to resolve user by biometric mapping.
 
 ## 10) Routing and Guards
 - `go_router` is used for declarative routing.

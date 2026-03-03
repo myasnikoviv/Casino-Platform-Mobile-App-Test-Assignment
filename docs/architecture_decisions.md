@@ -27,6 +27,7 @@ Companion full specification:
 - User records are persisted in a **Hive encrypted box**.
 - The 256-bit Hive AES key is generated once and stored in **flutter_secure_storage**.
 - Session state is stored in secure storage (session email key).
+- Biometric identifier mapping is stored through dedicated biometric gateway storage.
 - Passwords are persisted only as **SHA-256 hashes** (never plaintext).
 
 ### Security note

@@ -4,6 +4,7 @@ import 'package:casino_platform_test/src/core/exceptions/guarded_executor.dart';
 import 'package:casino_platform_test/src/core/utils/hash_utils.dart';
 import 'package:casino_platform_test/src/features/auth/data/dto/local_user_dto.dart';
 import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway.dart';
+import 'package:casino_platform_test/src/features/auth/data/gateways/biometric_gateway.dart';
 import 'package:casino_platform_test/src/features/auth/entities/user_session.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
 import 'package:local_auth/local_auth.dart';
@@ -11,9 +12,15 @@ import 'package:local_auth/local_auth.dart';
 /// Default local auth service implementation.
 class CPAuthServiceImpl implements CPAuthService {
   /// Creates [CPAuthServiceImpl].
-  const CPAuthServiceImpl(this._gateway, this._localAuth, this._executor);
+  const CPAuthServiceImpl(
+    this._gateway,
+    this._biometricGateway,
+    this._localAuth,
+    this._executor,
+  );
 
   final CPAuthLocalGateway _gateway;
+  final CPBiometricGateway _biometricGateway;
   final LocalAuthentication _localAuth;
   final CPGuardedExecutor _executor;
 
@@ -119,7 +126,7 @@ class CPAuthServiceImpl implements CPAuthService {
         throw const CPAuthException(code: CPAuthErrorCode.authRequired);
       }
 
-      await _gateway.saveBiometricEmail(email);
+      await _biometricGateway.saveBiometricIdentifier(email);
     });
   }
 
@@ -131,9 +138,10 @@ class CPAuthServiceImpl implements CPAuthService {
         throw const CPAuthException(code: CPAuthErrorCode.authRequired);
       }
 
-      final String? biometricEmail = await _gateway.getBiometricEmail();
+      final String? biometricEmail =
+          await _biometricGateway.getBiometricIdentifier();
       if (biometricEmail == email) {
-        await _gateway.clearBiometricEmail();
+        await _biometricGateway.clearBiometricIdentifier();
       }
     });
   }
@@ -141,7 +149,7 @@ class CPAuthServiceImpl implements CPAuthService {
   @override
   Future<bool> hasBiometricLoginConfigured() async {
     return _executor.run(() async {
-      final String? email = await _gateway.getBiometricEmail();
+      final String? email = await _biometricGateway.getBiometricIdentifier();
       return email != null && email.isNotEmpty;
     });
   }
@@ -153,7 +161,8 @@ class CPAuthServiceImpl implements CPAuthService {
       if (sessionEmail == null || sessionEmail.isEmpty) {
         return false;
       }
-      final String? biometricEmail = await _gateway.getBiometricEmail();
+      final String? biometricEmail =
+          await _biometricGateway.getBiometricIdentifier();
       return biometricEmail == sessionEmail;
     });
   }
@@ -167,7 +176,8 @@ class CPAuthServiceImpl implements CPAuthService {
             code: CPAuthErrorCode.biometricsUnavailable);
       }
 
-      final String? biometricEmail = await _gateway.getBiometricEmail();
+      final String? biometricEmail =
+          await _biometricGateway.getBiometricIdentifier();
       if (biometricEmail == null || biometricEmail.isEmpty) {
         throw const CPAuthException(code: CPAuthErrorCode.biometricsNotEnabled);
       }

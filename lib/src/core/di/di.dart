@@ -5,6 +5,8 @@ import 'package:casino_platform_test/src/core/storage/secure_storage_service.dar
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway.dart';
 import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway_impl.dart';
+import 'package:casino_platform_test/src/features/auth/data/gateways/biometric_gateway.dart';
+import 'package:casino_platform_test/src/features/auth/data/gateways/biometric_gateway_impl.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service_impl.dart';
 import 'package:casino_platform_test/src/core/constants/app_constants.dart';
@@ -48,10 +50,14 @@ class CPDI {
         resolveDependency<CPSecureStorageService>(),
       ),
     );
+    registerDependency<CPBiometricGateway>(
+      CPBiometricGatewayImpl(resolveDependency<CPSecureStorageService>()),
+    );
     registerDependency<CPGuardedExecutor>(CPGuardedExecutor());
     registerDependency<CPAuthService>(
       CPAuthServiceImpl(
         resolveDependency<CPAuthLocalGateway>(),
+        resolveDependency<CPBiometricGateway>(),
         LocalAuthentication(),
         resolveDependency<CPGuardedExecutor>(),
       ),
