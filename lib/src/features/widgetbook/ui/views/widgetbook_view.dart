@@ -18,13 +18,7 @@ class CPWidgetbookView extends StatefulWidget {
 }
 
 class _CPWidgetbookViewState extends State<CPWidgetbookView> {
-  late final TextEditingController _sampleController;
-
-  @override
-  void initState() {
-    super.initState();
-    _sampleController = TextEditingController();
-  }
+  final TextEditingController _sampleController = TextEditingController();
 
   @override
   void dispose() {
