@@ -120,6 +120,7 @@ class CPAuthServiceImpl implements CPAuthService {
         throw const CPAuthException(
             code: CPAuthErrorCode.biometricsUnavailable);
       }
+      await _authenticateForBiometricSettingsChange();
 
       final String? email = await _gateway.getSessionEmail();
       if (email == null || email.isEmpty) {
@@ -133,6 +134,13 @@ class CPAuthServiceImpl implements CPAuthService {
   @override
   Future<void> disableBiometricForCurrentSession() async {
     await _executor.run(() async {
+      final bool supported = await canUseBiometrics();
+      if (!supported) {
+        throw const CPAuthException(
+            code: CPAuthErrorCode.biometricsUnavailable);
+      }
+      await _authenticateForBiometricSettingsChange();
+
       final String? email = await _gateway.getSessionEmail();
       if (email == null || email.isEmpty) {
         throw const CPAuthException(code: CPAuthErrorCode.authRequired);
@@ -231,5 +239,18 @@ class CPAuthServiceImpl implements CPAuthService {
       'Dec',
     ];
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
+  }
+
+  Future<void> _authenticateForBiometricSettingsChange() async {
+    final bool authenticated = await _localAuth.authenticate(
+      localizedReason: 'Confirm your identity to update biometric login',
+      options: const AuthenticationOptions(
+        stickyAuth: true,
+        biometricOnly: true,
+      ),
+    );
+    if (!authenticated) {
+      throw const CPAuthException(code: CPAuthErrorCode.biometricAuthFailed);
+    }
   }
 }
