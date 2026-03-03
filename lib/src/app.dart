@@ -1,5 +1,5 @@
-import 'package:casino_platform_test/src/core/di/service_locator.dart';
-import 'package:casino_platform_test/src/core/localization/app_localizations.dart';
+import 'package:casino_platform_test/src/core/di/di.dart';
+import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/router/app_router.dart';
 import 'package:casino_platform_test/src/core/theme/app_theme.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
@@ -19,8 +19,8 @@ class CPCasinoApp extends StatefulWidget {
 
 class _CPCasinoAppState extends State<CPCasinoApp> {
   final CPDI _di = CPDI();
-  late final CPAuthCubit _authCubit;
-  late final CPRouter _router;
+  CPAuthCubit? _authCubit;
+  CPRouter? _router;
 
   @override
   void initState() {
@@ -29,19 +29,13 @@ class _CPCasinoAppState extends State<CPCasinoApp> {
       _di.resolve(),
       _di.resolve(),
     )..initialize();
-    _router = CPRouter(_authCubit);
-  }
-
-  @override
-  void dispose() {
-    _authCubit.close();
-    super.dispose();
+    _router = CPRouter(_authCubit!);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CPAuthCubit>.value(
-      value: _authCubit,
+    return BlocProvider<CPAuthCubit>(
+      create: (_) => _authCubit!,
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
         minTextAdapt: true,
@@ -52,13 +46,13 @@ class _CPCasinoAppState extends State<CPCasinoApp> {
             title: 'Casino Platform',
             theme: CPAppTheme.lightTheme,
             localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-              CPLocalizations.delegate,
+              AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const <Locale>[Locale('en')],
-            routerConfig: _router.router,
+            routerConfig: _router!.router,
           );
         },
       ),

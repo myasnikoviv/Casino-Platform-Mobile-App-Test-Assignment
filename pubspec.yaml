@@ -31,6 +31,7 @@ dev_dependencies:
   bloc_test: ^10.0.0
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/mock/games.json

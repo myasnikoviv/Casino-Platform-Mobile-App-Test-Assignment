@@ -2,73 +2,66 @@ import 'package:casino_platform_test/src/core/errors/app_exception.dart';
 import 'package:casino_platform_test/src/features/auth/entities/user_session.dart';
 import 'package:equatable/equatable.dart';
 
-/// Authentication status in application lifecycle.
-enum CPAuthStatus {
-  /// Startup state while session restoration is running.
-  unknown,
-
-  /// No active session.
-  unauthenticated,
-
-  /// Active logged-in session available.
-  authenticated,
-}
-
-/// UI state for the auth cubit.
-class CPAuthState extends Equatable {
+/// Base sealed state for auth lifecycle.
+sealed class CPAuthState extends Equatable {
   /// Creates [CPAuthState].
   const CPAuthState({
-    required this.status,
-    this.session,
-    this.isBusy = false,
+    required this.isBusy,
+    required this.biometricsAvailable,
     this.error,
-    this.biometricsAvailable = false,
   });
 
-  /// Current auth status.
-  final CPAuthStatus status;
-
-  /// Active user session, if available.
-  final CPUserSession? session;
-
-  /// Busy flag for async actions.
+  /// Async in-progress flag.
   final bool isBusy;
 
-  /// Last raised app exception.
-  final CPAppException? error;
-
-  /// Whether biometrics are supported by the device.
+  /// Biometric capability flag.
   final bool biometricsAvailable;
 
-  /// Initial state factory.
-  factory CPAuthState.initial() =>
-      const CPAuthState(status: CPAuthStatus.unknown);
+  /// Last domain error.
+  final CPAppException? error;
 
-  /// Returns updated immutable state.
-  CPAuthState copyWith({
-    CPAuthStatus? status,
-    CPUserSession? session,
-    bool clearSession = false,
-    bool? isBusy,
-    CPAppException? error,
-    bool clearError = false,
-    bool? biometricsAvailable,
-  }) {
-    return CPAuthState(
-      status: status ?? this.status,
-      session: clearSession ? null : session ?? this.session,
-      isBusy: isBusy ?? this.isBusy,
-      error: clearError ? null : error ?? this.error,
-      biometricsAvailable: biometricsAvailable ?? this.biometricsAvailable,
-    );
-  }
+  @override
+  List<Object?> get props => <Object?>[isBusy, biometricsAvailable, error];
+}
+
+/// Unknown state while bootstrap is in progress.
+class CPAuthUnknownState extends CPAuthState {
+  /// Creates [CPAuthUnknownState].
+  const CPAuthUnknownState({
+    super.isBusy = false,
+    super.biometricsAvailable = false,
+    super.error,
+  });
+}
+
+/// State with no authenticated session.
+class CPUnauthenticatedState extends CPAuthState {
+  /// Creates [CPUnauthenticatedState].
+  const CPUnauthenticatedState({
+    super.isBusy = false,
+    super.biometricsAvailable = false,
+    super.error,
+  });
+}
+
+/// State with active authenticated session.
+class CPAuthenticatedState extends CPAuthState {
+  /// Creates [CPAuthenticatedState].
+  const CPAuthenticatedState({
+    required this.session,
+    super.isBusy = false,
+    super.biometricsAvailable = false,
+    super.error,
+  });
+
+  /// Active session data.
+  final CPUserSession session;
 
   @override
   List<Object?> get props => <Object?>[
-        status,
         session,
         isBusy,
-        error,
         biometricsAvailable,
+        error,
       ];
 }

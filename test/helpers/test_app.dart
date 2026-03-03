@@ -1,4 +1,4 @@
-import 'package:casino_platform_test/src/core/localization/app_localizations.dart';
+import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +19,7 @@ class CPTestApp extends StatelessWidget {
         return MaterialApp(
           home: home,
           localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            CPLocalizations.delegate,
+            AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

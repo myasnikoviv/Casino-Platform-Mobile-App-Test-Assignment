@@ -1,5 +1,5 @@
 import 'package:casino_platform_test/src/core/errors/app_exception.dart';
-import 'package:casino_platform_test/src/features/auth/components/auth_form_validators.dart';
+import 'package:casino_platform_test/src/features/auth/ui/components/auth_form_validators.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

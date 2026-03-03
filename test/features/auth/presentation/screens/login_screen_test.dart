@@ -1,6 +1,6 @@
 import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
-import 'package:casino_platform_test/src/features/auth/screens/login_screen.dart';
+import 'package:casino_platform_test/src/features/auth/ui/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';

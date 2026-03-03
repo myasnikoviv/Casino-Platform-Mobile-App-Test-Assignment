@@ -1,53 +1,47 @@
-import 'package:casino_platform_test/src/features/games/entities/game_view_model.dart';
+import 'package:casino_platform_test/src/features/games/ui/view_models/game_view_model.dart';
 import 'package:equatable/equatable.dart';
 
-/// States for games catalog loading lifecycle.
-enum CPGamesStatus {
-  /// Data is currently loading.
-  loading,
-
-  /// Data loaded successfully.
-  success,
-
-  /// Data loading failed.
-  error,
+/// Base sealed state for games catalog lifecycle.
+sealed class CPGamesState extends Equatable {
+  /// Creates [CPGamesState].
+  const CPGamesState();
 }
 
-/// UI state for games list and detail lookup.
-class CPGamesState extends Equatable {
-  /// Creates [CPGamesState].
-  const CPGamesState({
-    required this.status,
-    this.games = const <CPGameViewModel>[],
-    this.errorMessage,
-  });
+/// Loading state.
+class CPGamesLoadingState extends CPGamesState {
+  /// Creates [CPGamesLoadingState].
+  const CPGamesLoadingState();
 
-  /// Current loading status.
-  final CPGamesStatus status;
+  @override
+  List<Object?> get props => const <Object?>[];
+}
+
+/// Success state with loaded games.
+class CPGamesSuccessState extends CPGamesState {
+  /// Creates [CPGamesSuccessState].
+  const CPGamesSuccessState(this.games);
 
   /// Loaded games list.
   final List<CPGameViewModel> games;
 
-  /// Localized error message.
-  final String? errorMessage;
+  @override
+  List<Object?> get props => <Object?>[games];
+}
 
-  /// Initial loading state.
-  factory CPGamesState.initial() =>
-      const CPGamesState(status: CPGamesStatus.loading);
+/// Error state with message and optional stale data.
+class CPGamesErrorState extends CPGamesState {
+  /// Creates [CPGamesErrorState].
+  const CPGamesErrorState({
+    required this.message,
+    this.games = const <CPGameViewModel>[],
+  });
 
-  /// Immutable copy update.
-  CPGamesState copyWith({
-    CPGamesStatus? status,
-    List<CPGameViewModel>? games,
-    String? errorMessage,
-  }) {
-    return CPGamesState(
-      status: status ?? this.status,
-      games: games ?? this.games,
-      errorMessage: errorMessage,
-    );
-  }
+  /// Localized message.
+  final String message;
+
+  /// Optional stale data.
+  final List<CPGameViewModel> games;
 
   @override
-  List<Object?> get props => <Object?>[status, games, errorMessage];
+  List<Object?> get props => <Object?>[message, games];
 }

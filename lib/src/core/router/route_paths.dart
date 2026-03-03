@@ -1,23 +1,28 @@
-/// Centralized route path constants to avoid string duplication.
+/// Structured route path builder with root path and chunks.
+class CPRoutePath {
+  /// Creates [CPRoutePath].
+  const CPRoutePath(this.rootPath, [this.chunks = const <String>[]]);
+
+  /// Root route path (e.g. `/auth`).
+  final String rootPath;
+
+  /// Nested chunks appended to [rootPath].
+  final List<String> chunks;
+
+  /// Fully resolved path.
+  String get fullPath {
+    if (chunks.isEmpty) {
+      return rootPath;
+    }
+    return <String>[rootPath, ...chunks].join('/');
+  }
+}
+
+/// Centralized root path constants.
 abstract final class CPRoutePaths {
-  /// Login screen route path.
-  static const String login = '/auth/login';
+  /// Auth root route.
+  static const String authRoot = '/auth';
 
-  /// Sign-up screen route path.
-  static const String signUp = '/auth/sign-up';
-
-  /// Password reveal checkpoint route path.
-  static const String passwordReview = '/auth/password-review';
-
-  /// Biometric setup route path.
-  static const String biometricSetup = '/auth/biometric-setup';
-
-  /// Main shell route path.
-  static const String shell = '/main';
-
-  /// Game details route path.
-  static const String gameDetails = '/main/game/:gameId';
-
-  /// Widgetbook route path.
-  static const String widgetbook = '/main/profile/widgetbook';
+  /// Main shell root route.
+  static const String mainRoot = '/main';
 }

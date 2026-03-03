@@ -8,136 +8,124 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Global auth cubit handling login, registration and session lifecycle.
 class CPAuthCubit extends Cubit<CPAuthState> {
   /// Creates [CPAuthCubit].
-  CPAuthCubit(this._authService, this._executor) : super(CPAuthState.initial());
+  CPAuthCubit(this._authService, this._executor)
+      : super(const CPAuthUnknownState());
 
   final CPAuthService _authService;
   final CPGuardedExecutor _executor;
 
   /// Restores saved session and device auth capabilities.
   Future<void> initialize() async {
-    emit(state.copyWith(isBusy: true, clearError: true));
+    emit(CPAuthUnknownState(isBusy: true));
     try {
       final bool bioAvailable = await _authService.canUseBiometrics();
       final CPUserSession? session =
           await _executor.run(_authService.restoreSession);
       if (session == null) {
-        emit(
-          state.copyWith(
-            status: CPAuthStatus.unauthenticated,
-            clearSession: true,
-            isBusy: false,
-            biometricsAvailable: bioAvailable,
-          ),
-        );
+        emit(CPUnauthenticatedState(biometricsAvailable: bioAvailable));
       } else {
         emit(
-          state.copyWith(
-            status: CPAuthStatus.authenticated,
+          CPAuthenticatedState(
             session: session,
-            isBusy: false,
             biometricsAvailable: bioAvailable,
           ),
         );
       }
     } on CPAppException catch (error) {
-      emit(
-        state.copyWith(
-          status: CPAuthStatus.unauthenticated,
-          clearSession: true,
-          isBusy: false,
-          error: error,
-        ),
-      );
+      emit(CPUnauthenticatedState(error: error));
     }
   }
 
   /// Performs email/password login.
   Future<void> login(String email, String password) async {
-    emit(state.copyWith(isBusy: true, clearError: true));
+    final bool bio = state.biometricsAvailable;
+    emit(CPUnauthenticatedState(isBusy: true, biometricsAvailable: bio));
     try {
       final CPUserSession session = await _executor.run(
         () => _authService.login(email: email, password: password),
       );
-      emit(
-        state.copyWith(
-          status: CPAuthStatus.authenticated,
-          session: session,
-          isBusy: false,
-        ),
-      );
+      emit(CPAuthenticatedState(session: session, biometricsAvailable: bio));
     } on CPAppException catch (error) {
-      emit(state.copyWith(isBusy: false, error: error));
+      emit(CPUnauthenticatedState(error: error, biometricsAvailable: bio));
     }
   }
 
   /// Performs sign-up and starts a session.
   Future<void> register(String name, String email, String password) async {
-    emit(state.copyWith(isBusy: true, clearError: true));
+    final bool bio = state.biometricsAvailable;
+    emit(CPUnauthenticatedState(isBusy: true, biometricsAvailable: bio));
     try {
       final CPUserSession session = await _executor.run(
         () => _authService.register(
             fullName: name, email: email, password: password),
       );
-      emit(
-        state.copyWith(
-          status: CPAuthStatus.authenticated,
-          session: session,
-          isBusy: false,
-        ),
-      );
+      emit(CPAuthenticatedState(session: session, biometricsAvailable: bio));
     } on CPAppException catch (error) {
-      emit(state.copyWith(isBusy: false, error: error));
+      emit(CPUnauthenticatedState(error: error, biometricsAvailable: bio));
     }
   }
 
   /// Logs out current user.
   Future<void> logout() async {
-    emit(state.copyWith(isBusy: true, clearError: true));
+    final bool bio = state.biometricsAvailable;
+    emit(CPUnauthenticatedState(isBusy: true, biometricsAvailable: bio));
     await _executor.run(_authService.logout);
-    emit(
-      state.copyWith(
-        status: CPAuthStatus.unauthenticated,
-        clearSession: true,
-        isBusy: false,
-      ),
-    );
+    emit(CPUnauthenticatedState(biometricsAvailable: bio));
   }
 
   /// Tries quick biometric login flow.
   Future<void> loginWithBiometrics() async {
-    emit(state.copyWith(isBusy: true, clearError: true));
+    final bool bio = state.biometricsAvailable;
+    emit(CPUnauthenticatedState(isBusy: true, biometricsAvailable: bio));
     try {
       final CPUserSession? session =
           await _executor.run(_authService.loginWithBiometrics);
       if (session == null) {
-        emit(state.copyWith(isBusy: false));
+        emit(CPUnauthenticatedState(biometricsAvailable: bio));
         return;
       }
-      emit(
-        state.copyWith(
-          status: CPAuthStatus.authenticated,
-          session: session,
-          isBusy: false,
-        ),
-      );
+      emit(CPAuthenticatedState(session: session, biometricsAvailable: bio));
     } on CPAppException catch (error) {
-      emit(state.copyWith(isBusy: false, error: error));
+      emit(CPUnauthenticatedState(error: error, biometricsAvailable: bio));
     }
   }
 
   /// Enables biometric one-tap login on current account.
   Future<void> enableBiometric() async {
-    emit(state.copyWith(isBusy: true, clearError: true));
+    final bool bio = state.biometricsAvailable;
+    final CPUserSession? session = state is CPAuthenticatedState
+        ? (state as CPAuthenticatedState).session
+        : null;
+    if (session == null) {
+      emit(CPUnauthenticatedState(biometricsAvailable: bio));
+      return;
+    }
+
+    emit(CPAuthenticatedState(
+        session: session, isBusy: true, biometricsAvailable: bio));
     try {
       await _executor.run(_authService.enableBiometricForCurrentSession);
-      emit(state.copyWith(isBusy: false));
+      emit(CPAuthenticatedState(session: session, biometricsAvailable: bio));
     } on CPAppException catch (error) {
-      emit(state.copyWith(isBusy: false, error: error));
+      emit(CPAuthenticatedState(
+          session: session, error: error, biometricsAvailable: bio));
     }
   }
 
   /// Clears current error state after user acknowledged it.
   void clearError() {
-    emit(state.copyWith(clearError: true));
+    final bool bio = state.biometricsAvailable;
+    switch (state) {
+      case CPAuthUnknownState():
+        emit(CPAuthUnknownState(biometricsAvailable: bio));
+      case CPUnauthenticatedState(:final isBusy):
+        emit(CPUnauthenticatedState(isBusy: isBusy, biometricsAvailable: bio));
+      case CPAuthenticatedState(:final session, :final isBusy):
+        emit(CPAuthenticatedState(
+          session: session,
+          isBusy: isBusy,
+          biometricsAvailable: bio,
+        ));
+    }
   }
 }

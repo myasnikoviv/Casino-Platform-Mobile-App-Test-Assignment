@@ -1,27 +1,24 @@
-import 'package:casino_platform_test/src/core/localization/app_localizations.dart';
+import 'package:casino_platform_test/l10n/app_localizations.dart';
 
 /// Supported game categories.
 enum CPGameCategory {
   /// Slot games category.
-  slots('slots', 'categorySlots'),
+  slots('slots'),
 
   /// Live casino games category.
-  live('live', 'categoryLive'),
+  live('live'),
 
   /// Table games category.
-  table('table', 'categoryTable'),
+  table('table'),
 
   /// Jackpot games category.
-  jackpot('jackpot', 'categoryJackpot');
+  jackpot('jackpot');
 
   /// Creates [CPGameCategory] metadata.
-  const CPGameCategory(this.rawValue, this.localizationKey);
+  const CPGameCategory(this.rawValue);
 
   /// Raw value stored in JSON.
   final String rawValue;
-
-  /// Localization key used in UI.
-  final String localizationKey;
 
   /// Parses [raw] into [CPGameCategory].
   static CPGameCategory fromRaw(String raw) {
@@ -32,5 +29,12 @@ enum CPGameCategory {
   }
 
   /// Returns localized label for category.
-  String label(CPLocalizations l10n) => l10n.text(localizationKey);
+  String label(AppLocalizations l10n) {
+    return switch (this) {
+      CPGameCategory.slots => l10n.categorySlots,
+      CPGameCategory.live => l10n.categoryLive,
+      CPGameCategory.table => l10n.categoryTable,
+      CPGameCategory.jackpot => l10n.categoryJackpot,
+    };
+  }
 }

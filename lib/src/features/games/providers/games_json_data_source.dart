@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:casino_platform_test/src/features/games/entities/game_dto.dart';
+import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
 import 'package:flutter/services.dart';
 
 /// JSON-backed data source for mock games data.

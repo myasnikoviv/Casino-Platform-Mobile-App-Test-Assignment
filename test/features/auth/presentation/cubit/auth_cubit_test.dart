@@ -21,12 +21,10 @@ void main() {
       ),
       act: (CPAuthCubit cubit) => cubit.initialize(),
       expect: () => <Matcher>[
-        isA<CPAuthState>().having((CPAuthState s) => s.isBusy, 'isBusy', true),
-        isA<CPAuthState>()
-            .having((CPAuthState s) => s.status, 'status',
-                CPAuthStatus.authenticated)
-            .having((CPAuthState s) => s.session, 'session', testSession)
-            .having((CPAuthState s) => s.biometricsAvailable, 'bio', true),
+        isA<CPAuthUnknownState>().having((s) => s.isBusy, 'isBusy', true),
+        isA<CPAuthenticatedState>()
+            .having((s) => s.session, 'session', testSession)
+            .having((s) => s.biometricsAvailable, 'bio', true),
       ],
     );
 
@@ -39,11 +37,9 @@ void main() {
       act: (CPAuthCubit cubit) =>
           cubit.login('alex@example.com', 'Password123!'),
       expect: () => <Matcher>[
-        isA<CPAuthState>().having((CPAuthState s) => s.isBusy, 'isBusy', true),
-        isA<CPAuthState>()
-            .having((CPAuthState s) => s.status, 'status',
-                CPAuthStatus.authenticated)
-            .having((CPAuthState s) => s.session, 'session', testSession),
+        isA<CPUnauthenticatedState>().having((s) => s.isBusy, 'isBusy', true),
+        isA<CPAuthenticatedState>()
+            .having((s) => s.session, 'session', testSession),
       ],
     );
 
@@ -51,39 +47,29 @@ void main() {
       'login emits error when auth fails',
       build: () => CPAuthCubit(
         CPFakeAuthService(
-            loginError: const CPAuthException(code: 'invalidCredentials')),
+          loginError: const CPAuthException(code: 'invalidCredentials'),
+        ),
         CPGuardedExecutor(),
       ),
       act: (CPAuthCubit cubit) => cubit.login('alex@example.com', 'bad'),
       expect: () => <Matcher>[
-        isA<CPAuthState>().having((CPAuthState s) => s.isBusy, 'isBusy', true),
-        isA<CPAuthState>()
-            .having((CPAuthState s) => s.isBusy, 'isBusy', false)
-            .having(
-                (CPAuthState s) => s.error, 'error', isA<CPAuthException>()),
+        isA<CPUnauthenticatedState>().having((s) => s.isBusy, 'isBusy', true),
+        isA<CPUnauthenticatedState>()
+            .having((s) => s.error, 'error', isA<CPAuthException>()),
       ],
     );
 
     blocTest<CPAuthCubit, CPAuthState>(
       'logout emits unauthenticated state',
-      build: () {
-        final CPAuthCubit cubit = CPAuthCubit(
-          CPFakeAuthService(loginResult: testSession),
-          CPGuardedExecutor(),
-        );
-        return cubit;
-      },
-      seed: () => const CPAuthState(
-        status: CPAuthStatus.authenticated,
-        session: testSession,
+      build: () => CPAuthCubit(
+        CPFakeAuthService(loginResult: testSession),
+        CPGuardedExecutor(),
       ),
+      seed: () => const CPAuthenticatedState(session: testSession),
       act: (CPAuthCubit cubit) => cubit.logout(),
       expect: () => <Matcher>[
-        isA<CPAuthState>().having((CPAuthState s) => s.isBusy, 'isBusy', true),
-        isA<CPAuthState>()
-            .having((CPAuthState s) => s.status, 'status',
-                CPAuthStatus.unauthenticated)
-            .having((CPAuthState s) => s.session, 'session', isNull),
+        isA<CPUnauthenticatedState>().having((s) => s.isBusy, 'isBusy', true),
+        isA<CPUnauthenticatedState>(),
       ],
     );
   });

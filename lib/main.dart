@@ -1,5 +1,5 @@
 import 'package:casino_platform_test/src/app.dart';
-import 'package:casino_platform_test/src/core/di/service_locator.dart';
+import 'package:casino_platform_test/src/core/di/di.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

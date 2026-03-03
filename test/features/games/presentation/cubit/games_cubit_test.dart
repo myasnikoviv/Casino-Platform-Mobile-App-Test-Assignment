@@ -1,11 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
-import 'package:casino_platform_test/src/core/localization/app_localizations.dart';
-import 'package:casino_platform_test/src/features/games/providers/games_json_data_source.dart';
-import 'package:casino_platform_test/src/features/games/entities/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/services/games_repository.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_cubit.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_state.dart';
+import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
+import 'package:casino_platform_test/src/features/games/providers/games_json_data_source.dart';
+import 'package:casino_platform_test/src/features/games/services/games_gateway.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:casino_platform_test/src/shared/enums/game_category.dart';
 import 'package:casino_platform_test/src/shared/enums/volatility_level.dart';
@@ -14,13 +14,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CPGamesCubit', () {
-    const CPLocalizations l10n = CPLocalizations(Locale('en'));
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(const Locale('en'));
+    });
 
     blocTest<CPGamesCubit, CPGamesState>(
       'emits success with mapped games',
       build: () => CPGamesCubit(
         CPGamesService(
-          CPGamesRepository(
+          CPGamesGateway(
             _SuccessGamesSource(),
             CPTtlCache<List<CPGameDto>>(),
           ),
@@ -28,12 +32,9 @@ void main() {
       ),
       act: (CPGamesCubit cubit) => cubit.loadGames(l10n),
       expect: () => <Matcher>[
-        isA<CPGamesState>().having(
-            (CPGamesState s) => s.status, 'status', CPGamesStatus.loading),
-        isA<CPGamesState>()
-            .having(
-                (CPGamesState s) => s.status, 'status', CPGamesStatus.success)
-            .having((CPGamesState s) => s.games.length, 'games length', 1),
+        isA<CPGamesLoadingState>(),
+        isA<CPGamesSuccessState>()
+            .having((s) => s.games.length, 'games length', 1),
       ],
     );
 
@@ -41,7 +42,7 @@ void main() {
       'emits error when service fails',
       build: () => CPGamesCubit(
         CPGamesService(
-          CPGamesRepository(
+          CPGamesGateway(
             _FailureGamesSource(),
             CPTtlCache<List<CPGameDto>>(),
           ),
@@ -49,12 +50,9 @@ void main() {
       ),
       act: (CPGamesCubit cubit) => cubit.loadGames(l10n),
       expect: () => <Matcher>[
-        isA<CPGamesState>().having(
-            (CPGamesState s) => s.status, 'status', CPGamesStatus.loading),
-        isA<CPGamesState>()
-            .having((CPGamesState s) => s.status, 'status', CPGamesStatus.error)
-            .having((CPGamesState s) => s.errorMessage, 'error',
-                'Unable to load games right now.'),
+        isA<CPGamesLoadingState>(),
+        isA<CPGamesErrorState>()
+            .having((s) => s.message, 'error', l10n.gamesLoadError),
       ],
     );
   });

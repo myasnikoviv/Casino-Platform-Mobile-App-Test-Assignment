@@ -1,17 +1,16 @@
 import 'dart:async';
 
 import 'package:casino_platform_test/src/core/router/auth_guard.dart';
-import 'package:casino_platform_test/src/core/router/route_paths.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
 import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
-import 'package:casino_platform_test/src/features/auth/screens/biometric_setup_screen.dart';
-import 'package:casino_platform_test/src/features/auth/screens/login_screen.dart';
-import 'package:casino_platform_test/src/features/auth/screens/password_review_screen.dart';
-import 'package:casino_platform_test/src/features/auth/screens/sign_up_screen.dart';
-import 'package:casino_platform_test/src/features/games/entities/game_view_model.dart';
-import 'package:casino_platform_test/src/features/games/screens/game_detail_screen.dart';
-import 'package:casino_platform_test/src/features/main_shell/screens/main_shell_screen.dart';
-import 'package:casino_platform_test/src/features/widgetbook/screens/widgetbook_screen.dart';
+import 'package:casino_platform_test/src/features/auth/ui/screens/biometric_setup_screen.dart';
+import 'package:casino_platform_test/src/features/auth/ui/screens/login_screen.dart';
+import 'package:casino_platform_test/src/features/auth/ui/screens/password_review_screen.dart';
+import 'package:casino_platform_test/src/features/auth/ui/screens/sign_up_screen.dart';
+import 'package:casino_platform_test/src/features/games/ui/view_models/game_view_model.dart';
+import 'package:casino_platform_test/src/features/games/ui/screens/game_detail_screen.dart';
+import 'package:casino_platform_test/src/features/main_shell/ui/screens/main_shell_screen.dart';
+import 'package:casino_platform_test/src/features/widgetbook/ui/screens/widgetbook_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,20 +22,20 @@ class CPRouter {
         _authGuard = CPAuthGuard(),
         _refreshListenable = _CPAuthRefreshListenable(authCubit) {
     router = GoRouter(
-      initialLocation: CPRoutePaths.login,
+      initialLocation: CPLoginScreen.routePath.fullPath,
       refreshListenable: _refreshListenable,
       redirect: _redirect,
       routes: <RouteBase>[
         GoRoute(
-          path: CPLoginScreen.routePath,
+          path: CPLoginScreen.routePath.fullPath,
           builder: (_, __) => const CPLoginScreen(),
         ),
         GoRoute(
-          path: CPSignUpScreen.routePath,
+          path: CPSignUpScreen.routePath.fullPath,
           builder: (_, __) => const CPSignUpScreen(),
         ),
         GoRoute(
-          path: CPPasswordReviewScreen.routePath,
+          path: CPPasswordReviewScreen.routePath.fullPath,
           builder: (_, GoRouterState state) {
             final String password =
                 state.extra is String ? state.extra! as String : '';
@@ -44,15 +43,15 @@ class CPRouter {
           },
         ),
         GoRoute(
-          path: CPBiometricSetupScreen.routePath,
+          path: CPBiometricSetupScreen.routePath.fullPath,
           builder: (_, __) => const CPBiometricSetupScreen(),
         ),
         GoRoute(
-          path: CPMainShellScreen.routePath,
+          path: CPMainShellScreen.routePath.fullPath,
           builder: (_, __) => const CPMainShellScreen(),
           routes: <RouteBase>[
             GoRoute(
-              path: 'game/:gameId',
+              path: CPGameDetailScreen.pathChunk,
               pageBuilder: (_, GoRouterState state) {
                 final String gameId = state.pathParameters['gameId'] ?? '';
                 final CPGameViewModel? extra = state.extra as CPGameViewModel?;
@@ -78,8 +77,8 @@ class CPRouter {
               },
             ),
             GoRoute(
-              path: 'profile/widgetbook',
-              builder: (_, __) => const CPWidgetbookScreen(),
+              path: CPWidgetBookScreen.pathChunk,
+              builder: (_, __) => const CPWidgetBookScreen(),
             ),
           ],
         ),
@@ -95,11 +94,11 @@ class CPRouter {
   late final GoRouter router;
 
   String? _redirect(BuildContext _, GoRouterState state) {
-    if (_authCubit.state.status == CPAuthStatus.unknown) {
+    if (_authCubit.state is CPAuthUnknownState) {
       return null;
     }
     return _authGuard.redirect(
-      status: _authCubit.state.status,
+      state: _authCubit.state,
       location: state.uri.path,
     );
   }

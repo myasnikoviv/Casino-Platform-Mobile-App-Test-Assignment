@@ -1,8 +1,8 @@
+import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
-import 'package:casino_platform_test/src/core/localization/app_localizations.dart';
+import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
 import 'package:casino_platform_test/src/features/games/providers/games_json_data_source.dart';
-import 'package:casino_platform_test/src/features/games/entities/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/services/games_repository.dart';
+import 'package:casino_platform_test/src/features/games/services/games_gateway.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:casino_platform_test/src/shared/enums/game_category.dart';
 import 'package:casino_platform_test/src/shared/enums/volatility_level.dart';
@@ -11,11 +11,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CPGamesService', () {
-    const CPLocalizations l10n = CPLocalizations(Locale('en'));
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(const Locale('en'));
+    });
 
     test('adapts dto fields into localized view model', () async {
       final CPGamesService service = CPGamesService(
-        CPGamesRepository(
+        CPGamesGateway(
           _StaticGamesSource(
             const <CPGameDto>[
               CPGameDto(
@@ -45,7 +49,7 @@ void main() {
 
     test('returns null when game id is missing', () async {
       final CPGamesService service = CPGamesService(
-        CPGamesRepository(
+        CPGamesGateway(
           _StaticGamesSource(const <CPGameDto>[]),
           CPTtlCache<List<CPGameDto>>(),
         ),
