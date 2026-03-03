@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 
 /// Home tab screen shell.
 class CPHomeTabScreen extends StatelessWidget {
-  /// Route segment for home tab.
-  static const String routeSegment = 'home';
+  /// Route chunk for home tab.
+  static const String pathChunk = 'home';
 
   /// Creates [CPHomeTabScreen].
   const CPHomeTabScreen({super.key});

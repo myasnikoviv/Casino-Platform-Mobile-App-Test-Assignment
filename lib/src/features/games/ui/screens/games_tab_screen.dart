@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 
 /// Games tab screen shell.
 class CPGamesTabScreen extends StatelessWidget {
-  /// Route segment for games tab.
-  static const String routeSegment = 'games';
+  /// Route chunk for games tab.
+  static const String pathChunk = 'games';
 
   /// Creates [CPGamesTabScreen].
   const CPGamesTabScreen({super.key});

@@ -1,8 +1,8 @@
 import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/providers/games_json_data_source.dart';
-import 'package:casino_platform_test/src/features/games/services/games_gateway.dart';
+import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
 import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:casino_platform_test/src/shared/enums/game_category.dart';
 import 'package:casino_platform_test/src/shared/enums/volatility_level.dart';

@@ -9,14 +9,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Widgetbook view.
-class CPWidgetbookView extends StatelessWidget {
+class CPWidgetbookView extends StatefulWidget {
   /// Creates [CPWidgetbookView].
   const CPWidgetbookView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController sampleController = TextEditingController();
+  State<CPWidgetbookView> createState() => _CPWidgetbookViewState();
+}
 
+class _CPWidgetbookViewState extends State<CPWidgetbookView> {
+  late final TextEditingController _sampleController;
+
+  @override
+  void initState() {
+    super.initState();
+    _sampleController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _sampleController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       padding: EdgeInsets.all(12.w),
       children: <Widget>[
@@ -34,7 +51,7 @@ class CPWidgetbookView extends StatelessWidget {
         Text(context.l10n.sharedWidgets, style: CPAppTextStyles.h2),
         SizedBox(height: 8.h),
         CPAppTextField(
-          controller: sampleController,
+          controller: _sampleController,
           label: context.l10n.sampleInput,
         ),
         SizedBox(height: 8.h),

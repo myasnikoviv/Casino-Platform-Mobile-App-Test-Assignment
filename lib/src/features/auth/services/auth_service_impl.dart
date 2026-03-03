@@ -1,7 +1,7 @@
 import 'package:casino_platform_test/src/core/errors/app_exception.dart';
 import 'package:casino_platform_test/src/core/utils/hash_utils.dart';
 import 'package:casino_platform_test/src/features/auth/data/dto/local_user_dto.dart';
-import 'package:casino_platform_test/src/features/auth/services/auth_local_gateway.dart';
+import 'package:casino_platform_test/src/features/auth/data/gateways/auth_local_gateway.dart';
 import 'package:casino_platform_test/src/features/auth/entities/user_session.dart';
 import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
 import 'package:intl/intl.dart';

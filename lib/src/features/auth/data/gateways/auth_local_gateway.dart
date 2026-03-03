@@ -6,7 +6,7 @@ import 'package:casino_platform_test/src/features/auth/data/dto/local_user_dto.d
 
 /// Gateway for local auth storage and session persistence.
 class CPAuthLocalGateway {
-  /// Creates local auth repository.
+  /// Creates local auth gateway.
   const CPAuthLocalGateway(
     this._secureBoxFactory,
     this._secureStorageService,

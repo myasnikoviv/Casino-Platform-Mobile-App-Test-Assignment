@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Profile tab screen shell.
 class CPProfileScreen extends StatelessWidget {
-  /// Route segment for profile tab.
-  static const String routeSegment = 'profile';
+  /// Route chunk for profile tab.
+  static const String pathChunk = 'profile';
 
   /// Creates [CPProfileScreen].
   const CPProfileScreen({super.key});

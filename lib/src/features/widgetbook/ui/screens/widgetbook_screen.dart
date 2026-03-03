@@ -1,5 +1,6 @@
 import 'package:casino_platform_test/src/core/router/route_paths.dart';
 import 'package:casino_platform_test/src/features/main_shell/ui/screens/main_shell_screen.dart';
+import 'package:casino_platform_test/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:casino_platform_test/src/features/widgetbook/ui/views/widgetbook_view.dart';
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,12 @@ import 'package:flutter/material.dart';
 /// Widgetbook screen shell.
 class CPWidgetbookScreen extends StatelessWidget {
   /// Route chunk for widgetbook screen.
-  static const String pathChunk = 'profile/widgetbook';
+  static const String pathChunk = 'widgetbook';
 
   /// Route path for widgetbook screen.
   static final CPRoutePath routePath = CPRoutePath(
     CPMainShellScreen.routePath.fullPath,
-    <String>[pathChunk],
+    <String>[CPProfileScreen.pathChunk, pathChunk],
   );
 
   /// Creates [CPWidgetbookScreen].

@@ -1,6 +1,6 @@
 import 'package:casino_platform_test/l10n/app_localizations.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
-import 'package:casino_platform_test/src/features/games/services/games_gateway.dart';
+import 'package:casino_platform_test/src/features/games/data/gateways/games_gateway.dart';
 import 'package:casino_platform_test/src/features/games/ui/view_models/game_view_model.dart';
 
 /// Service that adapts DTOs into UI-ready game view models.

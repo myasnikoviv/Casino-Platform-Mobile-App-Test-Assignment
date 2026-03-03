@@ -18,24 +18,18 @@ class CPCasinoApp extends StatefulWidget {
 }
 
 class _CPCasinoAppState extends State<CPCasinoApp> {
-  final CPDI _di = CPDI();
-  CPAuthCubit? _authCubit;
-  CPRouter? _router;
-
-  @override
-  void initState() {
-    super.initState();
-    _authCubit = CPAuthCubit(
-      _di.resolve(),
-      _di.resolve(),
+  final (CPAuthCubit, CPRouter) _bootstrap = (() {
+    final CPAuthCubit authCubit = CPAuthCubit(
+      CPDI.resolveDependency(),
+      CPDI.resolveDependency(),
     )..initialize();
-    _router = CPRouter(_authCubit!);
-  }
+    return (authCubit, CPRouter(authCubit));
+  })();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CPAuthCubit>(
-      create: (_) => _authCubit!,
+      create: (_) => _bootstrap.$1,
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
         minTextAdapt: true,
@@ -52,7 +46,7 @@ class _CPCasinoAppState extends State<CPCasinoApp> {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const <Locale>[Locale('en')],
-            routerConfig: _router!.router,
+            routerConfig: _bootstrap.$2.router,
           );
         },
       ),

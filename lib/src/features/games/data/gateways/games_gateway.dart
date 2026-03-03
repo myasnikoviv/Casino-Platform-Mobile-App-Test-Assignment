@@ -1,6 +1,6 @@
 import 'package:casino_platform_test/src/core/cache/ttl_cache.dart';
 import 'package:casino_platform_test/src/core/constants/app_constants.dart';
-import 'package:casino_platform_test/src/features/games/providers/games_json_data_source.dart';
+import 'package:casino_platform_test/src/features/games/data/sources/games_json_data_source.dart';
 import 'package:casino_platform_test/src/features/games/data/dto/game_dto.dart';
 
 /// Gateway that serves games from data source with TTL caching policy.
