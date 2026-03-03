@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:casino_platform_test/src/core/theme/app_text_styles.dart';
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
 import 'package:casino_platform_test/src/shared/ui/app_button.dart';
@@ -6,25 +8,88 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Home hero section with two promotional banners.
-class CPPromoCarousel extends StatelessWidget {
+class CPPromoCarousel extends StatefulWidget {
   /// Creates [CPPromoCarousel].
   const CPPromoCarousel({super.key});
 
   @override
+  State<CPPromoCarousel> createState() => _CPPromoCarouselState();
+}
+
+class _CPPromoCarouselState extends State<CPPromoCarousel> {
+  static const Duration _autoScrollInterval = Duration(seconds: 4);
+
+  late final PageController _pageController;
+  Timer? _autoScrollTimer;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _autoScrollTimer = Timer.periodic(_autoScrollInterval, (_) {
+      if (!mounted || !_pageController.hasClients) {
+        return;
+      }
+      final int nextIndex = (_currentIndex + 1) % 2;
+      _pageController.animateToPage(
+        nextIndex,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoScrollTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final List<_CPPromoContent> banners = <_CPPromoContent>[
+      _CPPromoContent(
+        imageUrl: 'https://picsum.photos/seed/promo1/1200/600',
+        title: context.l10n.promoTitle1,
+        ctaLabel: context.l10n.promoCta,
+      ),
+      _CPPromoContent(
+        imageUrl: 'https://picsum.photos/seed/promo2/1200/600',
+        title: context.l10n.promoTitle2,
+        ctaLabel: context.l10n.promoCta,
+      ),
+    ];
+
     return SizedBox(
-      height: 190.h,
-      child: PageView(
+      height: 214.h,
+      child: Column(
         children: <Widget>[
-          CPPromoBanner(
-            imageUrl: 'https://picsum.photos/seed/promo1/1200/600',
-            title: context.l10n.promoTitle1,
-            ctaLabel: context.l10n.promoCta,
+          SizedBox(
+            height: 190.h,
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: banners.length,
+              onPageChanged: (int index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              itemBuilder: (BuildContext context, int index) {
+                final _CPPromoContent banner = banners[index];
+                return CPPromoBanner(
+                  imageUrl: banner.imageUrl,
+                  title: banner.title,
+                  ctaLabel: banner.ctaLabel,
+                );
+              },
+            ),
           ),
-          CPPromoBanner(
-            imageUrl: 'https://picsum.photos/seed/promo2/1200/600',
-            title: context.l10n.promoTitle2,
-            ctaLabel: context.l10n.promoCta,
+          SizedBox(height: 8.h),
+          _CPPromoPageIndicator(
+            count: banners.length,
+            currentIndex: _currentIndex,
           ),
         ],
       ),
@@ -53,44 +118,85 @@ class CPPromoBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 8.w),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18.r),
-          child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            CPAppCachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
-            const DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: <Color>[Color(0xA0000000), Color(0x20000000)],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18.r),
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          CPAppCachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: <Color>[Color(0xA0000000), Color(0x20000000)],
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(14.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: CPAppTextStyles.h2.copyWith(color: Colors.white),
                 ),
-              ),
+                SizedBox(height: 8.h),
+                SizedBox(
+                  width: 140.w,
+                  child: CPAppButton(label: ctaLabel, onPressed: () {}),
+                ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.all(14.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    title,
-                    style: CPAppTextStyles.h2.copyWith(color: Colors.white),
-                  ),
-                  SizedBox(height: 8.h),
-                  SizedBox(
-                    width: 140.w,
-                    child: CPAppButton(label: ctaLabel, onPressed: () {}),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CPPromoPageIndicator extends StatelessWidget {
+  const _CPPromoPageIndicator({
+    required this.count,
+    required this.currentIndex,
+  });
+
+  final int count;
+  final int currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List<Widget>.generate(
+        count,
+        (int index) => AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: EdgeInsets.symmetric(horizontal: 3.w),
+          width: index == currentIndex ? 18.w : 8.w,
+          height: 8.h,
+          decoration: BoxDecoration(
+            color: index == currentIndex
+                ? const Color(0xFF0F766E)
+                : const Color(0xFFCBD5E1),
+            borderRadius: BorderRadius.circular(999.r),
+          ),
         ),
       ),
     );
   }
+}
+
+class _CPPromoContent {
+  const _CPPromoContent({
+    required this.imageUrl,
+    required this.title,
+    required this.ctaLabel,
+  });
+
+  final String imageUrl;
+  final String title;
+  final String ctaLabel;
 }

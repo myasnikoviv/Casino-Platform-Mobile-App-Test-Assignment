@@ -26,25 +26,34 @@ class CPHomeTabView extends StatelessWidget {
           onRefresh: () => context.read<CPGamesCubit>().loadGames(context.l10n),
           child: ListView(
             cacheExtent: 600,
-            padding: EdgeInsets.all(12.w),
+            padding: EdgeInsets.zero,
             children: <Widget>[
               const CPPromoCarousel(),
-              SizedBox(height: 14.h),
-              Text(context.l10n.gamesTab, style: CPAppTextStyles.h2),
-              SizedBox(height: 10.h),
-              switch (state) {
-                CPGamesLoadingState() => const CPHomeGamesSkeleton(),
-                CPGamesErrorState(:final message) => CPAppErrorState(
-                    message: message,
-                    retryLabel: context.l10n.retry,
-                    onRetry: () =>
-                        context.read<CPGamesCubit>().loadGames(context.l10n),
-                  ),
-                CPGamesSuccessState(:final games) => CPGamesGrid(
-                    games: games,
-                    onOpenGame: onOpenGame,
-                  ),
-              },
+              Padding(
+                padding: EdgeInsets.all(12.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 2.h),
+                    Text(context.l10n.gamesTab, style: CPAppTextStyles.h2),
+                    SizedBox(height: 10.h),
+                    switch (state) {
+                      CPGamesLoadingState() => const CPHomeGamesSkeleton(),
+                      CPGamesErrorState(:final message) => CPAppErrorState(
+                          message: message,
+                          retryLabel: context.l10n.retry,
+                          onRetry: () => context
+                              .read<CPGamesCubit>()
+                              .loadGames(context.l10n),
+                        ),
+                      CPGamesSuccessState(:final games) => CPGamesGrid(
+                          games: games,
+                          onOpenGame: onOpenGame,
+                        ),
+                    },
+                  ],
+                ),
+              ),
             ],
           ),
         );
