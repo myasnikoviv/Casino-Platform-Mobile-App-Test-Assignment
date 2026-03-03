@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Simple shimmer-like animated skeleton placeholder.
-class AppLoadingSkeleton extends StatefulWidget {
-  /// Creates [AppLoadingSkeleton].
-  const AppLoadingSkeleton({required this.height, super.key});
+class CPAppLoadingSkeleton extends StatefulWidget {
+  /// Creates [CPAppLoadingSkeleton].
+  const CPAppLoadingSkeleton({required this.height, super.key});
 
   /// Placeholder height.
   final double height;
 
   @override
-  State<AppLoadingSkeleton> createState() => _AppLoadingSkeletonState();
+  State<CPAppLoadingSkeleton> createState() => _CPAppLoadingSkeletonState();
 }
 
-class _AppLoadingSkeletonState extends State<AppLoadingSkeleton>
+class _CPAppLoadingSkeletonState extends State<CPAppLoadingSkeleton>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 

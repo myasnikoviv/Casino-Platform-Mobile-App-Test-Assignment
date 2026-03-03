@@ -3,27 +3,27 @@ import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('GuardedExecutor', () {
-    final GuardedExecutor executor = GuardedExecutor();
+  group('CPGuardedExecutor', () {
+    final CPGuardedExecutor executor = CPGuardedExecutor();
 
     test('returns action result on success', () async {
       final int result = await executor.run(() async => 7);
       expect(result, equals(7));
     });
 
-    test('rethrows AppException as-is', () async {
+    test('rethrows CPAppException as-is', () async {
       expect(
         () => executor.run<int>(
-          () async => throw const ValidationException(code: 'emptyField'),
+          () async => throw const CPValidationException(code: 'emptyField'),
         ),
-        throwsA(isA<ValidationException>()),
+        throwsA(isA<CPValidationException>()),
       );
     });
 
-    test('wraps unknown errors into UnexpectedAppException', () async {
+    test('wraps unknown errors into CPUnexpectedAppException', () async {
       expect(
         () => executor.run<int>(() async => throw Exception('boom')),
-        throwsA(isA<UnexpectedAppException>()),
+        throwsA(isA<CPUnexpectedAppException>()),
       );
     });
   });

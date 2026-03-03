@@ -1,87 +1,89 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:casino_platform_test/src/core/errors/app_exception.dart';
 import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/cubit/auth_state.dart';
+import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
+import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../helpers/fake_auth_service.dart';
 import '../../../../helpers/test_session.dart';
 
 void main() {
-  group('AuthCubit', () {
-    blocTest<AuthCubit, AuthState>(
+  group('CPAuthCubit', () {
+    blocTest<CPAuthCubit, CPAuthState>(
       'initialize emits authenticated when session exists',
-      build: () => AuthCubit(
-        FakeAuthService(
+      build: () => CPAuthCubit(
+        CPFakeAuthService(
           canUseBiometricsResult: true,
           restoreResult: testSession,
         ),
-        GuardedExecutor(),
+        CPGuardedExecutor(),
       ),
-      act: (AuthCubit cubit) => cubit.initialize(),
+      act: (CPAuthCubit cubit) => cubit.initialize(),
       expect: () => <Matcher>[
-        isA<AuthState>().having((AuthState s) => s.isBusy, 'isBusy', true),
-        isA<AuthState>()
-            .having(
-                (AuthState s) => s.status, 'status', AuthStatus.authenticated)
-            .having((AuthState s) => s.session, 'session', testSession)
-            .having((AuthState s) => s.biometricsAvailable, 'bio', true),
+        isA<CPAuthState>().having((CPAuthState s) => s.isBusy, 'isBusy', true),
+        isA<CPAuthState>()
+            .having((CPAuthState s) => s.status, 'status',
+                CPAuthStatus.authenticated)
+            .having((CPAuthState s) => s.session, 'session', testSession)
+            .having((CPAuthState s) => s.biometricsAvailable, 'bio', true),
       ],
     );
 
-    blocTest<AuthCubit, AuthState>(
+    blocTest<CPAuthCubit, CPAuthState>(
       'login emits authenticated on success',
-      build: () => AuthCubit(
-        FakeAuthService(loginResult: testSession),
-        GuardedExecutor(),
+      build: () => CPAuthCubit(
+        CPFakeAuthService(loginResult: testSession),
+        CPGuardedExecutor(),
       ),
-      act: (AuthCubit cubit) => cubit.login('alex@example.com', 'Password123!'),
+      act: (CPAuthCubit cubit) =>
+          cubit.login('alex@example.com', 'Password123!'),
       expect: () => <Matcher>[
-        isA<AuthState>().having((AuthState s) => s.isBusy, 'isBusy', true),
-        isA<AuthState>()
-            .having(
-                (AuthState s) => s.status, 'status', AuthStatus.authenticated)
-            .having((AuthState s) => s.session, 'session', testSession),
+        isA<CPAuthState>().having((CPAuthState s) => s.isBusy, 'isBusy', true),
+        isA<CPAuthState>()
+            .having((CPAuthState s) => s.status, 'status',
+                CPAuthStatus.authenticated)
+            .having((CPAuthState s) => s.session, 'session', testSession),
       ],
     );
 
-    blocTest<AuthCubit, AuthState>(
+    blocTest<CPAuthCubit, CPAuthState>(
       'login emits error when auth fails',
-      build: () => AuthCubit(
-        FakeAuthService(
-            loginError: const AuthException(code: 'invalidCredentials')),
-        GuardedExecutor(),
+      build: () => CPAuthCubit(
+        CPFakeAuthService(
+            loginError: const CPAuthException(code: 'invalidCredentials')),
+        CPGuardedExecutor(),
       ),
-      act: (AuthCubit cubit) => cubit.login('alex@example.com', 'bad'),
+      act: (CPAuthCubit cubit) => cubit.login('alex@example.com', 'bad'),
       expect: () => <Matcher>[
-        isA<AuthState>().having((AuthState s) => s.isBusy, 'isBusy', true),
-        isA<AuthState>()
-            .having((AuthState s) => s.isBusy, 'isBusy', false)
-            .having((AuthState s) => s.error, 'error', isA<AuthException>()),
+        isA<CPAuthState>().having((CPAuthState s) => s.isBusy, 'isBusy', true),
+        isA<CPAuthState>()
+            .having((CPAuthState s) => s.isBusy, 'isBusy', false)
+            .having(
+                (CPAuthState s) => s.error, 'error', isA<CPAuthException>()),
       ],
     );
 
-    blocTest<AuthCubit, AuthState>(
+    blocTest<CPAuthCubit, CPAuthState>(
       'logout emits unauthenticated state',
       build: () {
-        final AuthCubit cubit = AuthCubit(
-          FakeAuthService(loginResult: testSession),
-          GuardedExecutor(),
+        final CPAuthCubit cubit = CPAuthCubit(
+          CPFakeAuthService(loginResult: testSession),
+          CPGuardedExecutor(),
         );
         return cubit;
       },
-      seed: () => const AuthState(
-        status: AuthStatus.authenticated,
+      seed: () => const CPAuthState(
+        status: CPAuthStatus.authenticated,
         session: testSession,
       ),
-      act: (AuthCubit cubit) => cubit.logout(),
+      act: (CPAuthCubit cubit) => cubit.logout(),
       expect: () => <Matcher>[
-        isA<AuthState>().having((AuthState s) => s.isBusy, 'isBusy', true),
-        isA<AuthState>()
-            .having(
-                (AuthState s) => s.status, 'status', AuthStatus.unauthenticated)
-            .having((AuthState s) => s.session, 'session', isNull),
+        isA<CPAuthState>().having((CPAuthState s) => s.isBusy, 'isBusy', true),
+        isA<CPAuthState>()
+            .having((CPAuthState s) => s.status, 'status',
+                CPAuthStatus.unauthenticated)
+            .having((CPAuthState s) => s.session, 'session', isNull),
       ],
     );
   });

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 /// A lightweight localization provider for the assignment scope.
-class AppLocalizations {
+class CPLocalizations {
   /// Creates localized resources for a locale.
-  const AppLocalizations(this.locale);
+  const CPLocalizations(this.locale);
 
   /// Locale currently used by this localization instance.
   final Locale locale;
 
   /// Accessor for localization from widget context.
-  static AppLocalizations of(BuildContext context) {
-    final AppLocalizations? localizations =
-        Localizations.of<AppLocalizations>(context, AppLocalizations);
-    return localizations ?? const AppLocalizations(Locale('en'));
+  static CPLocalizations of(BuildContext context) {
+    final CPLocalizations? localizations =
+        Localizations.of<CPLocalizations>(context, CPLocalizations);
+    return localizations ?? const CPLocalizations(Locale('en'));
   }
 
   /// Delegate registration for [MaterialApp].
-  static const LocalizationsDelegate<AppLocalizations> delegate =
+  static const LocalizationsDelegate<CPLocalizations> delegate =
       _AppLocalizationsDelegate();
 
   static const Map<String, String> _en = <String, String>{
@@ -97,20 +97,19 @@ class AppLocalizations {
   }
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<CPLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) => locale.languageCode == 'en';
 
   @override
-  Future<AppLocalizations> load(Locale locale) async {
-    return AppLocalizations(locale);
+  Future<CPLocalizations> load(Locale locale) async {
+    return CPLocalizations(locale);
   }
 
   @override
-  bool shouldReload(covariant LocalizationsDelegate<AppLocalizations> old) {
+  bool shouldReload(covariant LocalizationsDelegate<CPLocalizations> old) {
     return false;
   }
 }

@@ -7,11 +7,11 @@ import 'package:casino_platform_test/src/core/storage/secure_storage_service.dar
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Creates encrypted Hive boxes using a key persisted in secure storage.
-class HiveSecureBoxFactory {
+class CPHiveSecureBoxFactory {
   /// Creates secure Hive box factory.
-  const HiveSecureBoxFactory(this._secureStorageService);
+  const CPHiveSecureBoxFactory(this._secureStorageService);
 
-  final SecureStorageService _secureStorageService;
+  final CPSecureStorageService _secureStorageService;
 
   /// Opens encrypted box by [name].
   Future<Box<dynamic>> openEncryptedBox(String name) async {
@@ -23,8 +23,8 @@ class HiveSecureBoxFactory {
   }
 
   Future<List<int>> _loadOrGenerateKey() async {
-    final String? encoded =
-        await _secureStorageService.read(AppConstants.hiveCipherKeyStorageKey);
+    final String? encoded = await _secureStorageService
+        .read(CPAppConstants.hiveCipherKeyStorageKey);
     if (encoded != null && encoded.isNotEmpty) {
       return base64Decode(encoded);
     }
@@ -34,7 +34,7 @@ class HiveSecureBoxFactory {
       List<int>.generate(32, (_) => random.nextInt(256)),
     );
     await _secureStorageService.write(
-      AppConstants.hiveCipherKeyStorageKey,
+      CPAppConstants.hiveCipherKeyStorageKey,
       base64Encode(bytes),
     );
     return bytes;

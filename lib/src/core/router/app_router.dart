@@ -1,65 +1,64 @@
 import 'dart:async';
 
-import 'package:casino_platform_test/src/core/di/service_locator.dart';
 import 'package:casino_platform_test/src/core/router/auth_guard.dart';
 import 'package:casino_platform_test/src/core/router/route_paths.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/cubit/auth_state.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/screens/biometric_setup_screen.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/screens/login_screen.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/screens/password_review_screen.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/screens/sign_up_screen.dart';
-import 'package:casino_platform_test/src/features/games/domain/entities/game_view_model.dart';
-import 'package:casino_platform_test/src/features/games/presentation/screens/game_detail_screen.dart';
-import 'package:casino_platform_test/src/features/main_shell/presentation/screens/main_shell_screen.dart';
-import 'package:casino_platform_test/src/features/widgetbook/presentation/screens/widgetbook_screen.dart';
+import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
+import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
+import 'package:casino_platform_test/src/features/auth/screens/biometric_setup_screen.dart';
+import 'package:casino_platform_test/src/features/auth/screens/login_screen.dart';
+import 'package:casino_platform_test/src/features/auth/screens/password_review_screen.dart';
+import 'package:casino_platform_test/src/features/auth/screens/sign_up_screen.dart';
+import 'package:casino_platform_test/src/features/games/entities/game_view_model.dart';
+import 'package:casino_platform_test/src/features/games/screens/game_detail_screen.dart';
+import 'package:casino_platform_test/src/features/main_shell/screens/main_shell_screen.dart';
+import 'package:casino_platform_test/src/features/widgetbook/screens/widgetbook_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// Application router configuration with auth-aware redirection policy.
-class AppRouter {
-  /// Creates [AppRouter].
-  AppRouter(ServiceLocator locator)
-      : _authCubit = locator.authCubit,
-        _authGuard = AuthGuard(),
-        _refreshListenable = _AuthRefreshListenable(locator.authCubit) {
+class CPRouter {
+  /// Creates [CPRouter].
+  CPRouter(CPAuthCubit authCubit)
+      : _authCubit = authCubit,
+        _authGuard = CPAuthGuard(),
+        _refreshListenable = _CPAuthRefreshListenable(authCubit) {
     router = GoRouter(
-      initialLocation: RoutePaths.login,
+      initialLocation: CPRoutePaths.login,
       refreshListenable: _refreshListenable,
       redirect: _redirect,
       routes: <RouteBase>[
         GoRoute(
-          path: LoginScreen.routePath,
-          builder: (_, __) => const LoginScreen(),
+          path: CPLoginScreen.routePath,
+          builder: (_, __) => const CPLoginScreen(),
         ),
         GoRoute(
-          path: SignUpScreen.routePath,
-          builder: (_, __) => const SignUpScreen(),
+          path: CPSignUpScreen.routePath,
+          builder: (_, __) => const CPSignUpScreen(),
         ),
         GoRoute(
-          path: PasswordReviewScreen.routePath,
+          path: CPPasswordReviewScreen.routePath,
           builder: (_, GoRouterState state) {
             final String password =
                 state.extra is String ? state.extra! as String : '';
-            return PasswordReviewScreen(password: password);
+            return CPPasswordReviewScreen(password: password);
           },
         ),
         GoRoute(
-          path: BiometricSetupScreen.routePath,
-          builder: (_, __) => const BiometricSetupScreen(),
+          path: CPBiometricSetupScreen.routePath,
+          builder: (_, __) => const CPBiometricSetupScreen(),
         ),
         GoRoute(
-          path: MainShellScreen.routePath,
-          builder: (_, __) => const MainShellScreen(),
+          path: CPMainShellScreen.routePath,
+          builder: (_, __) => const CPMainShellScreen(),
           routes: <RouteBase>[
             GoRoute(
               path: 'game/:gameId',
               pageBuilder: (_, GoRouterState state) {
                 final String gameId = state.pathParameters['gameId'] ?? '';
-                final GameViewModel? extra = state.extra as GameViewModel?;
+                final CPGameViewModel? extra = state.extra as CPGameViewModel?;
                 return CustomTransitionPage<void>(
                   key: state.pageKey,
-                  child: GameDetailScreen(gameId: gameId, extra: extra),
+                  child: CPGameDetailScreen(gameId: gameId, extra: extra),
                   transitionsBuilder:
                       (_, Animation<double> animation, __, Widget child) {
                     final CurvedAnimation curve = CurvedAnimation(
@@ -80,7 +79,7 @@ class AppRouter {
             ),
             GoRoute(
               path: 'profile/widgetbook',
-              builder: (_, __) => const WidgetbookScreen(),
+              builder: (_, __) => const CPWidgetbookScreen(),
             ),
           ],
         ),
@@ -88,15 +87,15 @@ class AppRouter {
     );
   }
 
-  final AuthCubit _authCubit;
-  final AuthGuard _authGuard;
-  final _AuthRefreshListenable _refreshListenable;
+  final CPAuthCubit _authCubit;
+  final CPAuthGuard _authGuard;
+  final _CPAuthRefreshListenable _refreshListenable;
 
   /// GoRouter instance used by MaterialApp.router.
   late final GoRouter router;
 
   String? _redirect(BuildContext _, GoRouterState state) {
-    if (_authCubit.state.status == AuthStatus.unknown) {
+    if (_authCubit.state.status == CPAuthStatus.unknown) {
       return null;
     }
     return _authGuard.redirect(
@@ -106,12 +105,12 @@ class AppRouter {
   }
 }
 
-class _AuthRefreshListenable extends ChangeNotifier {
-  _AuthRefreshListenable(AuthCubit authCubit) {
+class _CPAuthRefreshListenable extends ChangeNotifier {
+  _CPAuthRefreshListenable(CPAuthCubit authCubit) {
     _subscription = authCubit.stream.listen((_) => notifyListeners());
   }
 
-  late final StreamSubscription<AuthState> _subscription;
+  late final StreamSubscription<CPAuthState> _subscription;
 
   @override
   void dispose() {

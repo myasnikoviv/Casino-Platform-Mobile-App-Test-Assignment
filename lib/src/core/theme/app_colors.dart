@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Color tokens used by the app theme and UI components.
-abstract final class AppColors {
+abstract final class CPAppColors {
   /// Primary brand color.
   static const Color primary = Color(0xFF0F766E);
 

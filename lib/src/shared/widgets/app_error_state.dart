@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Friendly error state with retry action.
-class AppErrorState extends StatelessWidget {
-  /// Creates [AppErrorState].
-  const AppErrorState({
+class CPAppErrorState extends StatelessWidget {
+  /// Creates [CPAppErrorState].
+  const CPAppErrorState({
     required this.message,
     required this.retryLabel,
     required this.onRetry,
@@ -29,18 +29,19 @@ class AppErrorState extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppColors.warning.withValues(alpha: 0.15),
+        color: CPAppColors.warning.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(Icons.warning_amber_rounded,
-              color: AppColors.warning, size: 28.sp),
+              color: CPAppColors.warning, size: 28.sp),
           SizedBox(height: 8.h),
-          Text(message, style: AppTextStyles.body, textAlign: TextAlign.center),
+          Text(message,
+              style: CPAppTextStyles.body, textAlign: TextAlign.center),
           SizedBox(height: 12.h),
-          AppButton(label: retryLabel, onPressed: onRetry),
+          CPAppButton(label: retryLabel, onPressed: onRetry),
         ],
       ),
     );

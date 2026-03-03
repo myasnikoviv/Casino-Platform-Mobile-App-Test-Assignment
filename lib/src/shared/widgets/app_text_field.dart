@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Reusable text field with consistent spacing and behavior.
-class AppTextField extends StatelessWidget {
-  /// Creates [AppTextField].
-  const AppTextField({
+class CPAppTextField extends StatelessWidget {
+  /// Creates [CPAppTextField].
+  const CPAppTextField({
     required this.controller,
     required this.label,
     this.obscureText = false,

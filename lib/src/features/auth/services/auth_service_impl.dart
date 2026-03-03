@@ -1,39 +1,39 @@
 import 'package:casino_platform_test/src/core/errors/app_exception.dart';
 import 'package:casino_platform_test/src/core/utils/hash_utils.dart';
-import 'package:casino_platform_test/src/features/auth/data/dto/local_user_dto.dart';
-import 'package:casino_platform_test/src/features/auth/data/repositories/auth_local_repository.dart';
-import 'package:casino_platform_test/src/features/auth/domain/entities/user_session.dart';
-import 'package:casino_platform_test/src/features/auth/domain/services/auth_service.dart';
+import 'package:casino_platform_test/src/features/auth/entities/local_user_dto.dart';
+import 'package:casino_platform_test/src/features/auth/services/auth_local_repository.dart';
+import 'package:casino_platform_test/src/features/auth/entities/user_session.dart';
+import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
 import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
 
 /// Default local auth service implementation.
-class AuthServiceImpl implements AuthService {
-  /// Creates [AuthServiceImpl].
-  const AuthServiceImpl(this._repository, this._localAuth);
+class CPAuthServiceImpl implements CPAuthService {
+  /// Creates [CPAuthServiceImpl].
+  const CPAuthServiceImpl(this._repository, this._localAuth);
 
-  final AuthLocalRepository _repository;
+  final CPAuthLocalRepository _repository;
   final LocalAuthentication _localAuth;
 
   @override
-  Future<UserSession> register({
+  Future<CPUserSession> register({
     required String fullName,
     required String email,
     required String password,
   }) async {
     final String normalizedEmail = email.trim().toLowerCase();
-    final LocalUserDto? existing =
+    final CPLocalUserDto? existing =
         await _repository.getUserByEmail(normalizedEmail);
     if (existing != null) {
-      throw const AuthException(code: 'emailExists');
+      throw const CPAuthException(code: 'emailExists');
     }
 
     final DateTime now = DateTime.now();
-    final LocalUserDto dto = LocalUserDto(
+    final CPLocalUserDto dto = CPLocalUserDto(
       id: now.microsecondsSinceEpoch.toString(),
       fullName: fullName.trim(),
       email: normalizedEmail,
-      passwordHash: HashUtils.sha256Of(password),
+      passwordHash: CPHashUtils.sha256Of(password),
       createdAtIso: now.toIso8601String(),
     );
 
@@ -44,20 +44,20 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<UserSession> login({
+  Future<CPUserSession> login({
     required String email,
     required String password,
   }) async {
     final String normalizedEmail = email.trim().toLowerCase();
-    final LocalUserDto? user =
+    final CPLocalUserDto? user =
         await _repository.getUserByEmail(normalizedEmail);
     if (user == null) {
-      throw const AuthException(code: 'invalidCredentials');
+      throw const CPAuthException(code: 'invalidCredentials');
     }
 
-    final String hash = HashUtils.sha256Of(password);
+    final String hash = CPHashUtils.sha256Of(password);
     if (user.passwordHash != hash) {
-      throw const AuthException(code: 'invalidCredentials');
+      throw const CPAuthException(code: 'invalidCredentials');
     }
 
     await _repository.saveSession(normalizedEmail);
@@ -65,12 +65,12 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<UserSession?> restoreSession() async {
+  Future<CPUserSession?> restoreSession() async {
     final String? sessionEmail = await _repository.getSessionEmail();
     if (sessionEmail == null || sessionEmail.isEmpty) {
       return null;
     }
-    final LocalUserDto? user = await _repository.getUserByEmail(sessionEmail);
+    final CPLocalUserDto? user = await _repository.getUserByEmail(sessionEmail);
     if (user == null) {
       await _repository.clearSession();
       return null;
@@ -93,13 +93,13 @@ class AuthServiceImpl implements AuthService {
   Future<void> enableBiometricForCurrentSession() async {
     final String? email = await _repository.getSessionEmail();
     if (email == null || email.isEmpty) {
-      throw const AuthException(code: 'authRequired');
+      throw const CPAuthException(code: 'authRequired');
     }
     await _repository.saveBiometricEmail(email);
   }
 
   @override
-  Future<UserSession?> loginWithBiometrics() async {
+  Future<CPUserSession?> loginWithBiometrics() async {
     final bool supported = await canUseBiometrics();
     if (!supported) {
       return null;
@@ -121,7 +121,8 @@ class AuthServiceImpl implements AuthService {
       return null;
     }
 
-    final LocalUserDto? user = await _repository.getUserByEmail(biometricEmail);
+    final CPLocalUserDto? user =
+        await _repository.getUserByEmail(biometricEmail);
     if (user == null) {
       return null;
     }
@@ -130,10 +131,10 @@ class AuthServiceImpl implements AuthService {
     return _toSession(user);
   }
 
-  UserSession _toSession(LocalUserDto dto) {
+  CPUserSession _toSession(CPLocalUserDto dto) {
     final DateTime memberSince =
         DateTime.tryParse(dto.createdAtIso) ?? DateTime.now();
-    return UserSession(
+    return CPUserSession(
       id: dto.id,
       fullName: dto.fullName,
       email: dto.email,

@@ -1,5 +1,5 @@
 /// Centralized route path constants to avoid string duplication.
-abstract final class RoutePaths {
+abstract final class CPRoutePaths {
   /// Login screen route path.
   static const String login = '/auth/login';
 

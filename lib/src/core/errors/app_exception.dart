@@ -1,38 +1,38 @@
 /// Base exception contract for all known domain/infrastructure failures.
-sealed class AppException implements Exception {
-  /// Creates [AppException] with optional details.
-  const AppException({this.message});
+sealed class CPAppException implements Exception {
+  /// Creates [CPAppException] with optional details.
+  const CPAppException({this.message});
 
   /// Optional technical details.
   final String? message;
 }
 
 /// Indicates validation related user input errors.
-class ValidationException extends AppException {
-  /// Creates [ValidationException].
-  const ValidationException({required this.code, super.message});
+class CPValidationException extends CPAppException {
+  /// Creates [CPValidationException].
+  const CPValidationException({required this.code, super.message});
 
   /// Localization key for user-facing validation feedback.
   final String code;
 }
 
 /// Indicates authentication failures.
-class AuthException extends AppException {
-  /// Creates [AuthException].
-  const AuthException({required this.code, super.message});
+class CPAuthException extends CPAppException {
+  /// Creates [CPAuthException].
+  const CPAuthException({required this.code, super.message});
 
   /// Localization key for user-facing auth feedback.
   final String code;
 }
 
 /// Indicates storage/read-write errors.
-class StorageException extends AppException {
-  /// Creates [StorageException].
-  const StorageException({super.message});
+class CPStorageException extends CPAppException {
+  /// Creates [CPStorageException].
+  const CPStorageException({super.message});
 }
 
 /// Generic fallback exception.
-class UnexpectedAppException extends AppException {
-  /// Creates [UnexpectedAppException].
-  const UnexpectedAppException({super.message});
+class CPUnexpectedAppException extends CPAppException {
+  /// Creates [CPUnexpectedAppException].
+  const CPUnexpectedAppException({super.message});
 }

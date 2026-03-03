@@ -1,6 +1,6 @@
 import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
+import 'package:casino_platform_test/src/features/auth/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,17 +9,18 @@ import '../../../../helpers/fake_auth_service.dart';
 import '../../../../helpers/test_app.dart';
 
 void main() {
-  group('SignUpScreen', () {
+  group('CPSignUpScreen', () {
     testWidgets('shows mismatch error when passwords differ', (
       WidgetTester tester,
     ) async {
-      final AuthCubit cubit = AuthCubit(FakeAuthService(), GuardedExecutor());
+      final CPAuthCubit cubit =
+          CPAuthCubit(CPFakeAuthService(), CPGuardedExecutor());
 
       await tester.pumpWidget(
-        TestApp(
-          home: BlocProvider<AuthCubit>.value(
+        CPTestApp(
+          home: BlocProvider<CPAuthCubit>.value(
             value: cubit,
-            child: const SignUpScreen(),
+            child: const CPSignUpScreen(),
           ),
         ),
       );

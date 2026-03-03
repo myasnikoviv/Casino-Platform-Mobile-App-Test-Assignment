@@ -4,8 +4,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Test app wrapper that provides localization and ScreenUtil context.
-class TestApp extends StatelessWidget {
-  const TestApp({required this.home, super.key});
+class CPTestApp extends StatelessWidget {
+  const CPTestApp({required this.home, super.key});
 
   final Widget home;
 
@@ -19,7 +19,7 @@ class TestApp extends StatelessWidget {
         return MaterialApp(
           home: home,
           localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            AppLocalizations.delegate,
+            CPLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

@@ -1,5 +1,5 @@
 /// Generic in-memory cache with TTL-based invalidation.
-class TtlCache<T> {
+class CPTtlCache<T> {
   T? _value;
   DateTime? _expiresAt;
 

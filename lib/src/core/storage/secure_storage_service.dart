@@ -1,9 +1,9 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Thin wrapper for secure key/value persistence.
-class SecureStorageService {
+class CPSecureStorageService {
   /// Creates secure storage service.
-  const SecureStorageService(this._storage);
+  const CPSecureStorageService(this._storage);
 
   final FlutterSecureStorage _storage;
 

@@ -2,7 +2,7 @@ import 'package:casino_platform_test/src/core/localization/app_localizations.dar
 import 'package:flutter/widgets.dart';
 
 /// Helper extension for concise access to localization resources.
-extension BuildContextX on BuildContext {
+extension CPBuildContextX on BuildContext {
   /// Returns app localization resources for this [BuildContext].
-  AppLocalizations get l10n => AppLocalizations.of(this);
+  CPLocalizations get l10n => CPLocalizations.of(this);
 }

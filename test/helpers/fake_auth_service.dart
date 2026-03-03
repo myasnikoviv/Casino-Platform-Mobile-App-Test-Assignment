@@ -1,9 +1,9 @@
-import 'package:casino_platform_test/src/features/auth/domain/entities/user_session.dart';
-import 'package:casino_platform_test/src/features/auth/domain/services/auth_service.dart';
+import 'package:casino_platform_test/src/features/auth/entities/user_session.dart';
+import 'package:casino_platform_test/src/features/auth/services/auth_service.dart';
 
 /// Test double for auth service with configurable responses.
-class FakeAuthService implements AuthService {
-  FakeAuthService({
+class CPFakeAuthService implements CPAuthService {
+  CPFakeAuthService({
     this.registerResult,
     this.loginResult,
     this.restoreResult,
@@ -16,10 +16,10 @@ class FakeAuthService implements AuthService {
     this.enableBiometricError,
   });
 
-  UserSession? registerResult;
-  UserSession? loginResult;
-  UserSession? restoreResult;
-  UserSession? biometricLoginResult;
+  CPUserSession? registerResult;
+  CPUserSession? loginResult;
+  CPUserSession? restoreResult;
+  CPUserSession? biometricLoginResult;
   bool canUseBiometricsResult;
 
   Exception? registerError;
@@ -43,7 +43,7 @@ class FakeAuthService implements AuthService {
   }
 
   @override
-  Future<UserSession> login({
+  Future<CPUserSession> login({
     required String email,
     required String password,
   }) async {
@@ -58,7 +58,7 @@ class FakeAuthService implements AuthService {
   }
 
   @override
-  Future<UserSession?> loginWithBiometrics() async {
+  Future<CPUserSession?> loginWithBiometrics() async {
     if (biometricLoginError != null) {
       throw biometricLoginError!;
     }
@@ -71,7 +71,7 @@ class FakeAuthService implements AuthService {
   }
 
   @override
-  Future<UserSession> register({
+  Future<CPUserSession> register({
     required String fullName,
     required String email,
     required String password,
@@ -87,7 +87,7 @@ class FakeAuthService implements AuthService {
   }
 
   @override
-  Future<UserSession?> restoreSession() async {
+  Future<CPUserSession?> restoreSession() async {
     if (restoreError != null) {
       throw restoreError!;
     }

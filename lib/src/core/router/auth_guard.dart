@@ -1,28 +1,28 @@
 import 'package:casino_platform_test/src/core/router/route_paths.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/cubit/auth_state.dart';
+import 'package:casino_platform_test/src/features/auth/cubit/auth_state.dart';
 
 /// Central auth guard policy for route redirections.
-class AuthGuard {
+class CPAuthGuard {
   /// Returns redirect path or null if navigation is allowed.
   String? redirect({
-    required AuthStatus status,
+    required CPAuthStatus status,
     required String location,
   }) {
     final bool isAuthRoute =
-        location == RoutePaths.login || location == RoutePaths.signUp;
-    final bool isOnboardingRoute = location == RoutePaths.passwordReview ||
-        location == RoutePaths.biometricSetup;
+        location == CPRoutePaths.login || location == CPRoutePaths.signUp;
+    final bool isOnboardingRoute = location == CPRoutePaths.passwordReview ||
+        location == CPRoutePaths.biometricSetup;
 
-    if (status == AuthStatus.unauthenticated && !isAuthRoute) {
-      return RoutePaths.login;
+    if (status == CPAuthStatus.unauthenticated && !isAuthRoute) {
+      return CPRoutePaths.login;
     }
 
-    if (status == AuthStatus.authenticated && isAuthRoute) {
-      return RoutePaths.shell;
+    if (status == CPAuthStatus.authenticated && isAuthRoute) {
+      return CPRoutePaths.shell;
     }
 
-    if (status == AuthStatus.unauthenticated && isOnboardingRoute) {
-      return RoutePaths.login;
+    if (status == CPAuthStatus.unauthenticated && isOnboardingRoute) {
+      return CPRoutePaths.login;
     }
 
     return null;

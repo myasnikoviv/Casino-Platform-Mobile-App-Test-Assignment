@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Typography tokens centralized for reuse and consistency.
-abstract final class AppTextStyles {
+abstract final class CPAppTextStyles {
   /// Large heading style for major screen titles.
   static TextStyle h1 = TextStyle(
     fontSize: 28.sp,
     fontWeight: FontWeight.w700,
-    color: AppColors.textPrimary,
+    color: CPAppColors.textPrimary,
     height: 1.2,
   );
 
@@ -16,7 +16,7 @@ abstract final class AppTextStyles {
   static TextStyle h2 = TextStyle(
     fontSize: 20.sp,
     fontWeight: FontWeight.w700,
-    color: AppColors.textPrimary,
+    color: CPAppColors.textPrimary,
     height: 1.25,
   );
 
@@ -24,7 +24,7 @@ abstract final class AppTextStyles {
   static TextStyle body = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
-    color: AppColors.textPrimary,
+    color: CPAppColors.textPrimary,
     height: 1.4,
   );
 
@@ -32,7 +32,7 @@ abstract final class AppTextStyles {
   static TextStyle label = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w600,
-    color: AppColors.textSecondary,
+    color: CPAppColors.textSecondary,
     height: 1.3,
   );
 }

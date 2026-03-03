@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('hash utility should produce deterministic sha256', () {
-    final String value = HashUtils.sha256Of('password123');
+    final String value = CPHashUtils.sha256Of('password123');
     expect(
       value,
       equals(

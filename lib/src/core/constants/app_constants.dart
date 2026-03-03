@@ -1,5 +1,5 @@
 /// App-wide constants used by infrastructure and feature modules.
-abstract final class AppConstants {
+abstract final class CPAppConstants {
   /// Key used to persist a currently active session email.
   static const String sessionEmailKey = 'session_email';
 

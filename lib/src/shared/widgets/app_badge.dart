@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Small badge component used for category/metadata labels.
-class AppBadge extends StatelessWidget {
-  /// Creates [AppBadge].
-  const AppBadge({required this.label, super.key});
+class CPAppBadge extends StatelessWidget {
+  /// Creates [CPAppBadge].
+  const CPAppBadge({required this.label, super.key});
 
   /// Badge text content.
   final String label;
@@ -16,12 +16,12 @@ class AppBadge extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.12),
+        color: CPAppColors.primary.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999.r),
       ),
       child: Text(
         label,
-        style: AppTextStyles.label.copyWith(color: AppColors.primary),
+        style: CPAppTextStyles.label.copyWith(color: CPAppColors.primary),
       ),
     );
   }

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// App-wide primary button component.
-class AppButton extends StatelessWidget {
-  /// Creates [AppButton].
-  const AppButton({
+class CPAppButton extends StatelessWidget {
+  /// Creates [CPAppButton].
+  const CPAppButton({
     required this.label,
     required this.onPressed,
     this.isLoading = false,
@@ -33,7 +33,7 @@ class AppButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: CPAppColors.primary,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
@@ -52,7 +52,8 @@ class AppButton extends StatelessWidget {
                   if (icon != null) Icon(icon, size: 18.sp),
                   if (icon != null) SizedBox(width: 8.w),
                   Text(label,
-                      style: AppTextStyles.body.copyWith(color: Colors.white)),
+                      style:
+                          CPAppTextStyles.body.copyWith(color: Colors.white)),
                 ],
               ),
       ),

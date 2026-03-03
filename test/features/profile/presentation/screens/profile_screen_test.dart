@@ -1,6 +1,6 @@
 import 'package:casino_platform_test/src/core/errors/guarded_executor.dart';
-import 'package:casino_platform_test/src/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:casino_platform_test/src/features/profile/presentation/screens/profile_screen.dart';
+import 'package:casino_platform_test/src/features/auth/cubit/auth_cubit.dart';
+import 'package:casino_platform_test/src/features/profile/screens/profile_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,21 +9,21 @@ import '../../../../helpers/test_app.dart';
 import '../../../../helpers/test_session.dart';
 
 void main() {
-  group('ProfileScreen', () {
+  group('CPProfileScreen', () {
     testWidgets('renders user data and dev widgetbook entry', (
       WidgetTester tester,
     ) async {
-      final AuthCubit cubit = AuthCubit(
-        FakeAuthService(loginResult: testSession),
-        GuardedExecutor(),
+      final CPAuthCubit cubit = CPAuthCubit(
+        CPFakeAuthService(loginResult: testSession),
+        CPGuardedExecutor(),
       );
       await cubit.login('alex@example.com', 'Password123!');
 
       await tester.pumpWidget(
-        TestApp(
-          home: BlocProvider<AuthCubit>.value(
+        CPTestApp(
+          home: BlocProvider<CPAuthCubit>.value(
             value: cubit,
-            child: const ProfileScreen(),
+            child: const CPProfileScreen(),
           ),
         ),
       );
