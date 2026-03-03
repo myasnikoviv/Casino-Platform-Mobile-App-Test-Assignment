@@ -61,6 +61,36 @@ void main() {
 
       expect(result, isNull);
     });
+
+    test('falls back to gateway when cache payload is malformed', () async {
+      final _ThrowingCache cache = _ThrowingCache();
+      final CPGamesService service = CPGamesServiceImpl(
+        _StaticGamesGateway(
+          const <CPGameDto>[
+            CPGameDto(
+              id: 'g-fallback',
+              name: 'Fallback Game',
+              category: CPGameCategory.slots,
+              provider: 'Provider',
+              rtp: 95.0,
+              volatility: CPVolatilityLevel.medium,
+              description: 'Description',
+              thumbnailUrl: 'thumb',
+              headerUrl: 'header',
+            ),
+          ],
+        ),
+        cache,
+        const CPGameViewModelAdapter(),
+        CPGuardedExecutor(),
+      );
+
+      final games = await service.getGames(l10n);
+
+      expect(games, hasLength(1));
+      expect(games.first.id, equals('g-fallback'));
+      expect(cache.cleared, isTrue);
+    });
   });
 }
 
@@ -71,4 +101,21 @@ class _StaticGamesGateway implements CPGamesGateway {
 
   @override
   Future<List<CPGameDto>> getGames() async => _games;
+}
+
+class _ThrowingCache implements CPTtlCache<List<CPGameDto>> {
+  bool cleared = false;
+
+  @override
+  List<CPGameDto>? get() {
+    throw StateError('Malformed cache payload');
+  }
+
+  @override
+  void put(List<CPGameDto> value, Duration ttl) {}
+
+  @override
+  void clear() {
+    cleared = true;
+  }
 }

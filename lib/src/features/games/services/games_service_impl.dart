@@ -26,7 +26,7 @@ class CPGamesServiceImpl implements CPGamesService {
   @override
   Future<List<CPGameViewModel>> getGames(AppLocalizations l10n) async {
     return _executor.run(() async {
-      final List<CPGameDto>? cached = _cache.get();
+      final List<CPGameDto>? cached = _safeGetCachedGames();
       if (cached != null) {
         return cached
             .map((CPGameDto dto) => _adapter.adapt(dto, l10n))
@@ -43,7 +43,8 @@ class CPGamesServiceImpl implements CPGamesService {
   Future<CPGameViewModel?> getGameById(
       String gameId, AppLocalizations l10n) async {
     return _executor.run(() async {
-      final List<CPGameDto> dtos = _cache.get() ?? await _gateway.getGames();
+      final List<CPGameDto> dtos =
+          _safeGetCachedGames() ?? await _gateway.getGames();
       for (final CPGameDto dto in dtos) {
         if (dto.id == gameId) {
           return _adapter.adapt(dto, l10n);
@@ -51,5 +52,15 @@ class CPGamesServiceImpl implements CPGamesService {
       }
       return null;
     });
+  }
+
+  /// Reads cached games and self-heals malformed cache entries.
+  List<CPGameDto>? _safeGetCachedGames() {
+    try {
+      return _cache.get();
+    } catch (_) {
+      _cache.clear();
+      return null;
+    }
   }
 }
