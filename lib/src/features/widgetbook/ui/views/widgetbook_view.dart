@@ -1,5 +1,8 @@
 import 'package:casino_platform_test/src/core/theme/app_colors.dart';
 import 'package:casino_platform_test/src/core/theme/app_text_styles.dart';
+import 'package:casino_platform_test/src/features/games/ui/components/game_card.dart';
+import 'package:casino_platform_test/src/features/games/ui/components/promo_carousel.dart';
+import 'package:casino_platform_test/src/features/games/ui/view_models/game_view_model.dart';
 import 'package:casino_platform_test/src/shared/extensions/build_context_x.dart';
 import 'package:casino_platform_test/src/shared/ui/app_badge.dart';
 import 'package:casino_platform_test/src/shared/ui/app_button.dart';
@@ -19,6 +22,17 @@ class CPWidgetbookView extends StatefulWidget {
 
 class _CPWidgetbookViewState extends State<CPWidgetbookView> {
   final TextEditingController _sampleController = TextEditingController();
+  static const CPGameViewModel _sampleGame = CPGameViewModel(
+    id: 'widgetbook-game',
+    name: 'Daily Tournament',
+    categoryLabel: 'Live Casino',
+    providerLabel: 'Casino Platform',
+    rtpLabel: '96.30%',
+    volatilityLabel: 'Medium',
+    description: 'Widgetbook sample game card for design review.',
+    thumbnailUrl: 'https://picsum.photos/seed/widgetbook-game/500/300',
+    headerUrl: 'https://picsum.photos/seed/widgetbook-game-header/1200/600',
+  );
 
   @override
   void dispose() {
@@ -54,6 +68,27 @@ class _CPWidgetbookViewState extends State<CPWidgetbookView> {
         const CPAppBadge(label: 'Badge'),
         SizedBox(height: 8.h),
         CPAppLoadingSkeleton(height: 80.h),
+        SizedBox(height: 14.h),
+        Text(context.l10n.gamesTab, style: CPAppTextStyles.h2),
+        SizedBox(height: 8.h),
+        SizedBox(
+          height: 180.h,
+          child: CPGameCard(
+            game: _sampleGame,
+            onOpen: () {},
+          ),
+        ),
+        SizedBox(height: 14.h),
+        Text(context.l10n.promoTitle1, style: CPAppTextStyles.h2),
+        SizedBox(height: 8.h),
+        SizedBox(
+          height: 190.h,
+          child: CPPromoBanner(
+            imageUrl: 'https://picsum.photos/seed/widgetbook-promo/1200/600',
+            title: context.l10n.promoTitle1,
+            ctaLabel: context.l10n.promoCta,
+          ),
+        ),
       ],
     );
   }

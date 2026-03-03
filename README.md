@@ -43,6 +43,8 @@ Production-oriented implementation of a local-auth casino platform app, aligned 
   - Game grid with exactly 4 columns.
   - 12 mock games loaded from JSON.
   - Flip animation on game card tap + Hero transition to details.
+  - Hero animation conflict in tabbed layout is resolved via `HeroMode` scoping for active tab only.
+  - Remote images use `CachedNetworkImage` with shimmer placeholder and graceful error fallback.
 - Game details:
   - Large header image, category badge, provider, RTP, volatility, description, Play Now CTA.
 - Profile:
@@ -52,6 +54,7 @@ Production-oriented implementation of a local-auth casino platform app, aligned 
   - Dev-only Widgetbook entry.
 - Widgetbook-like screen:
   - Shared widgets preview and theme token preview.
+  - Real feature components preview: game card and promo banner (daily tournament style card).
 
 ## Architecture
 See architecture documentation:

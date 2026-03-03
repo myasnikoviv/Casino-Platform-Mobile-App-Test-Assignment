@@ -65,6 +65,9 @@ Companion full specification:
 - Widgets are decomposed into small files/components.
 - Screen-specific helper methods returning widgets are avoided in favor of standalone widget classes.
 - ScreenUtil is used for responsive sizing (`.w`, `.h`, `.sp`).
+- Network images are rendered with `CPAppCachedNetworkImage` (`CachedNetworkImage`) to enable disk/memory caching.
+- Image loading states use shimmer placeholders; image failures render explicit non-blocking fallback visuals.
+- Hero-based game-image transitions are enabled and protected against duplicate tags in tabbed layout by scoping `HeroMode` to active tab.
 
 ## 9) Localization Strategy
 - No UI literals are hardcoded in screen code.
@@ -74,6 +77,9 @@ Companion full specification:
 ## 10) Dev-only Widgetbook Route
 - Internal widgetbook-like screen is exposed from Profile.
 - Visibility is restricted to `kDebugMode` to prevent production exposure.
+- Widgetbook includes both shared UI primitives and feature-level components:
+  - game card preview (`CPGameCard`),
+  - promo/daily tournament banner preview (`CPPromoBanner`).
 
 ## 11) Assignment-specific Enhancements Added
 - Password save/copy checkpoint after registration with masked display (`******`) and explicit copy CTA.

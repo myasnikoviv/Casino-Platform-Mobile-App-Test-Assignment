@@ -105,8 +105,19 @@ This document describes the full technical architecture of the assignment projec
 - Reusable skeletons with shimmer-based placeholders.
 - Small focused widgets; avoid large monolithic build methods.
 - Responsive units via `flutter_screenutil`.
+- Network assets are loaded through `CPAppCachedNetworkImage` (backed by `CachedNetworkImage`) for cache-aware rendering.
+- Game-card to details navigation uses Hero continuity; tab-subtree collisions are avoided by enabling heroes only on the active tab (`HeroMode` strategy).
 
-## 13) Testing Strategy (TDD)
+## 13) UI Reviewability Without Running App
+- Because assignment reviewers may inspect code/docs without launching the app, UI-specific decisions are explicitly documented:
+  - Hero transitions and flip interaction behavior,
+  - skeleton/shimmer loading behavior,
+  - cached network image strategy and error fallback.
+- Dev-only Widgetbook route provides visual coverage for:
+  - shared components/tokens,
+  - feature components (`CPGameCard`, `CPPromoBanner` / daily tournament style).
+
+## 14) Testing Strategy (TDD)
 - Workflow: test first -> minimal implementation -> refactor.
 - Covered scope:
   - Core infrastructure and policies.
@@ -115,7 +126,7 @@ This document describes the full technical architecture of the assignment projec
   - Widget-level auth/profile flows.
 - Goal: reduce manual QA effort and catch regressions early.
 
-## 14) Planned API Migration Path
+## 15) Planned API Migration Path
 When backend endpoints are available:
 1. Implement `CPGamesApiGateway.getGames()` with Dio/Retrofit.
 2. Keep service/cubit/ui unchanged.
