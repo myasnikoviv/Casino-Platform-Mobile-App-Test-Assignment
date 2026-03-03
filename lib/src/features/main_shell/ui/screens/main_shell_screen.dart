@@ -1,7 +1,5 @@
-import 'package:casino_platform_test/src/core/di/di.dart';
 import 'package:casino_platform_test/src/core/router/route_paths.dart';
 import 'package:casino_platform_test/src/features/games/cubit/games_cubit.dart';
-import 'package:casino_platform_test/src/features/games/services/games_service.dart';
 import 'package:casino_platform_test/src/features/games/ui/screens/games_tab_screen.dart';
 import 'package:casino_platform_test/src/features/games/ui/screens/home_tab_screen.dart';
 import 'package:casino_platform_test/src/features/main_shell/ui/views/main_shell_view.dart';
@@ -26,9 +24,6 @@ class CPMainShellScreen extends StatefulWidget {
 }
 
 class _CPMainShellScreenState extends State<CPMainShellScreen> {
-  static final CPDI _di = CPDI();
-  final CPGamesCubit _gamesCubit =
-      CPGamesCubit(_di.resolveDependency<CPGamesService>());
   int _index = 0;
   bool _loaded = false;
 
@@ -39,7 +34,7 @@ class _CPMainShellScreenState extends State<CPMainShellScreen> {
       return;
     }
     _loaded = true;
-    _gamesCubit.loadGames(context.l10n);
+    context.read<CPGamesCubit>().loadGames(context.l10n);
   }
 
   @override
@@ -50,13 +45,10 @@ class _CPMainShellScreenState extends State<CPMainShellScreen> {
       CPProfileScreen(),
     ];
 
-    return BlocProvider<CPGamesCubit>(
-      create: (_) => _gamesCubit,
-      child: CPMainShellView(
-        index: _index,
-        tabs: tabs,
-        onIndexChanged: (value) => setState(() => _index = value),
-      ),
+    return CPMainShellView(
+      index: _index,
+      tabs: tabs,
+      onIndexChanged: (value) => setState(() => _index = value),
     );
   }
 }
